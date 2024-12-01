@@ -30,8 +30,31 @@ body {
   color: #333;
 }
 
+.form-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.form-section h4 {
+  margin-bottom: 15px;
+  color: #495057;
+}
+
 .form-group {
   margin-bottom: 15px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
 }
 
 label {
@@ -46,6 +69,11 @@ input {
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+}
+
+.disabled-input {
+  background-color: #e9ecef;
+  cursor: not-allowed;
 }
 
 button {
@@ -75,9 +103,18 @@ button:hover {
   font-size: 14px;
 }
 
-.login-container {
+.auth-container {
   max-width: 400px;
   margin: 100px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container {
+  max-width: 600px;
+  margin: 40px auto;
   padding: 20px;
   background: white;
   border-radius: 8px;
@@ -97,10 +134,44 @@ button:hover {
   align-items: center;
 }
 
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #0056b3;
+}
+
 .logout-btn {
   background-color: #dc3545;
 }
 
 .logout-btn:hover {
   background-color: #c82333;
+}
+
+.auth-links {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.auth-links a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+.react-select {
+  margin-top: 5px;
 }
