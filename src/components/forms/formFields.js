@@ -1,54 +1,56 @@
-const firewallFields = [
+const baseFields = [
   {
-    label: 'Стоимость Фаервола:',
+    label: 'Стоимость:',
     type: 'number',
-    name: 'firewallPrice',
+    name: 'price',
     min: 0,
   },
   {
     label: 'Срок установки и настройки:',
     type: 'number',
-    name: 'firewallPeriod',
+    name: 'period',
     min: 0,
   },
   {
     label: 'Заработная плата сотрудника:',
     type: 'number',
-    name: 'firewallWorkerSalary',
+    name: 'workerSalary',
     min: 0,
   },
   {
     label: 'Стоимость подписок и лицензий:',
     type: 'number',
-    name: 'firewallSubscription',
+    name: 'subscription',
     min: 0,
   },
 ];
 
-const vpnFields = [
-  {
-    label: 'Стоимость VPN:',
-    type: 'number',
-    name: 'vpnPrice',
-    min: 0,
-  },
-  {
-    label: 'Срок настройки VPN:',
-    type: 'number',
-    name: 'vpnPeriod',
-    min: 0,
-  },
-  {
-    label: 'Количество пользователей:',
-    type: 'number',
-    name: 'vpnUsers',
-    min: 1,
-  },
+const fieldsNames = [
+  'antivirus',
+  'preventionSystem',
+  'encryption',
+  'authenticationSystem',
+  'emailSecurity',
+  'vulnerabilitySystem',
+  'backupSystem',
+  'antiExploitSoftware',
+  'siem',
+  'soar',
+  'waf',
+  'dlp',
+  'penTesting',
+  'botnetSecurity',
+  'cryptographicKeySystem',
+  'safetyStandartMeans',
+  'firewall',
 ];
 
-const formFields = {
-  firewallFields,
-  vpnFields,
-};
+const formFields = fieldsNames.reduce((acc, name) => ({
+  ...acc,
+  [`${name}Fields`]: baseFields.map(field => ({
+    ...field,
+    name: `${name}${field.name.charAt(0).toUpperCase()}${field.name.slice(1)}`,
+  })),
+}), {});
 
 export default formFields;
