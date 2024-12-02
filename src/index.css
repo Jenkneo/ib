@@ -87,17 +87,17 @@ body {
 }
 
 .form-section h4 {
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   color: #2c3e50;
   font-size: 1.1em;
 }
 
 /* Form Elements */
 .form-title {
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 25px;
   color: #2c3e50;
-  border-bottom: 2px solid #e9ecef;
+  /* border-bottom: 2px solid #e9ecef; */
   padding-bottom: 10px;
 }
 
