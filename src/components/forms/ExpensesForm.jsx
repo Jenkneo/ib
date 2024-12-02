@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import FormSection from './FormSection';
+import formFields from './formFields';
 
 function PersonnelForm({ onCalculate }) {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -21,51 +23,99 @@ function PersonnelForm({ onCalculate }) {
 
     hasFirewall: false,
     firewallPrice: 0,
+    firewallPeriod: 0,
+    firewallWorkerSalary: 0,
+    firewallSubscription: 0,
     
     hasPreventionSystem: false,
     preventionSystemPrice: 0,
+    preventionSystemPeriod: 0,
+    preventionSystemWorkerSalary: 0,
+    preventionSystemSubscription: 0,
 
     hasEncryption: false,
     encryptionPrice: 0,
+    encryptionPeriod: 0,
+    encryptionWorkerSalary: 0,
+    encryptionSubscription: 0,
 
     hasAuthenticationSystem: false,
     authenticationSystemPrice: 0,
+    authenticationSystemPeriod: 0,
+    authenticationSystemWorkerSalary: 0,
+    authenticationSystemSubscription: 0,
 
     hasEmailSecurity: false,
     emailSecurityPrice: 0,
+    emailSecurityPeriod: 0,
+    emailSecurityWorkerSalary: 0,
+    emailSecuritySubscription: 0,
 
     hasVulnerabilitySystem: false,
     vulnerabilitySystemPrice: 0,
+    vulnerabilitySystemPeriod: 0,
+    vulnerabilitySystemWorkerSalary: 0,
+    vulnerabilitySystemSubscription: 0,
 
     hasBackupSystem: false,
     backupSystemPrice: 0,
+    backupSystemPeriod: 0,
+    backupSystemWorkerSalary: 0,
+    backupSystemSubscription: 0,
 
     hasAntiExploitSoftware: false,
     antiExploitSoftwarePrice: 0,
+    antiExploitSoftwarePeriod: 0,
+    antiExploitSoftwareWorkerSalary: 0,
+    antiExploitSoftwareSubscription: 0,
 
     hasSIEM: false,
     siemPrice: 0,
+    siemPeriod: 0,
+    siemWorkerSalary: 0,
+    siemSubscription: 0,
 
     hasSOAR: false,
     soarPrice: 0,
+    soarPeriod: 0,
+    soarWorkerSalary: 0,
+    soarSubscription: 0,
 
     hasWAF: false,
     wafPrice: 0,
+    wafPeriod: 0,
+    wafWorkerSalary: 0,
+    wafSubscription: 0,
 
     hasDLP: false,
     dlpPrice: 0,
+    dlpPeriod: 0,
+    dlpWorkerSalary: 0,
+    dlpSubscription: 0,
 
     hasPenTesting: false,
     penTestingPrice: 0,
+    penTestingPeriod: 0,
+    penTestingWorkerSalary: 0,
+    penTestingSubscription: 0,
 
     hasBotnetSecurity: false,
     botnetSecurityPrice: 0,
+    botnetSecurityPeriod: 0,
+    botnetSecurityWorkerSalary: 0,
+    botnetSecuritySubscription: 0,
 
     hasCryptographicKeySystem: false,
     cryptographicKeySystemPrice: 0,
+    cryptographicKeySystemPeriod: 0,
+    cryptographicKeySystemWorkerSalary: 0,
+    cryptographicKeySystemSubscription: 0,
 
     hasSafetyStandartMeans: false,
-    safetyStandartMeansPrice: 0
+    safetyStandartMeansPrice: 0,
+    safetyStandartMeansPeriod: 0,
+    safetyStandartMeansWorkerSalary: 0,
+    safetyStandartMeansSubscription: 0
   });
 
   const calculateTotal = useCallback(() => {
@@ -103,6 +153,19 @@ function PersonnelForm({ onCalculate }) {
     }));
   };
 
+  const sections = [
+    {
+      title: 'Фаервол',
+      checkboxName: 'hasFirewall',
+      fields: formFields.firewallFields,
+    },
+    {
+      title: 'VPN',
+      checkboxName: 'hasVPN',
+      fields: formFields.vpnFields,
+    },
+  ];
+
   return (
     <div className="form-container">
       <div className="form-header">
@@ -119,8 +182,22 @@ function PersonnelForm({ onCalculate }) {
       {isEnabled && (
         <div className="form-content">
           <h3 className='form-title'>Расходы на программное обеспечение для информационной безопасности</h3>
-            
-{/* ------------------------ Антивирус ------------------------ */}
+          {sections.map((section, index) => (
+            <FormSection
+              key={index} // Уникальный ключ для списка
+              title={section.title}
+              checkboxName={section.checkboxName}
+              isChecked={formData[section.checkboxName]}
+              onCheckboxChange={handleBoolChange}
+              fields={section.fields.map((field) => ({
+                ...field,
+                value: formData[field.name],
+              }))}
+              onFieldChange={handleChange}
+            />
+          ))}
+
+{/* ------------------------- Антивирус ------------------------ */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -137,7 +214,7 @@ function PersonnelForm({ onCalculate }) {
             {formData.hasAntivirus && (
               <div>
                 <div className="form-group">
-                  <label>Стоимость Антивируса:</label>
+                  <label>Стоимость:</label>
                   <input
                     type="number"
                     name="antivirusPrice"
@@ -180,7 +257,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ------------------------ Фаерволы ------------------------ */}
+{/* ------------------------- Фаерволы ------------------------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -200,8 +277,99 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость Фаервола:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
-                    value={formData.antivirusPrice}
+                    name="firewallPrice"
+                    value={formData.firewallPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="firewallPeriod"
+                    value={formData.firewallPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="firewallWorkerSalary"
+                    value={formData.firewallWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Cтоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="firewallSubscription"
+                    value={formData.firewallSubscription}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+              </div>
+              
+            )}
+          </div>
+{/* ------------------------------------------------------------ */}
+{/* - Системы предотвращения и обнаружения вторжений (IDS/IPS) - */}
+          <div className="form-section">            
+            <div className="checkbox-group">
+              <label className='toggle-label'>
+                <input
+                  type="checkbox"
+                  name="hasPreventionSystem"
+                  checked={formData.hasPreventionSystem}
+                  onChange={handleBoolChange}
+                />
+                <h4>Система предотвращения и обнаружения вторжений</h4>
+              </label>
+            </div>
+
+            {formData.hasPreventionSystem && (
+              <div>
+                <div className="form-group">
+                  <label>Стоимость Системы предотвращения и обнаружения вторжений:</label>
+                  <input
+                    type="number"
+                    name="preventionSystemPrice"
+                    value={formData.preventionSystemPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="preventionSystemPeriod"
+                    value={formData.preventionSystemPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="preventionSystemWorkerSalary"
+                    value={formData.preventionSystemWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Cтоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="preventionSystemSubscription"
+                    value={formData.preventionSystemSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -230,8 +398,38 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость Шифрования:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="encryptionPrice"
                     value={formData.encryptionPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="encryptionPeriod"
+                    value={formData.encryptionPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="encryptionWorkerSalary"
+                    value={formData.encryptionWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Cтоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="encryptionSubscription"
+                    value={formData.encryptionSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -240,7 +438,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ------------------------ Аутентификация ------------------------ */}
+{/* ----------- Управление доступом и аутентификация ----------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -250,18 +448,48 @@ function PersonnelForm({ onCalculate }) {
                   checked={formData.hasAuthenticationSystem}
                   onChange={handleBoolChange}
                 />
-                <h4>Аутентификация</h4>
+                <h4>Системы управления доступом и аутентификации</h4>
               </label>
             </div>
 
             {formData.hasAuthenticationSystem && (
               <div>
                 <div className="form-group">
-                  <label>Стоимость Аутентификации:</label>
+                  <label>Стоимость системы:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="authenticationSystemPrice"
                     value={formData.authenticationSystemPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="authenticationSystemPeriod"
+                    value={formData.authenticationSystemPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="authenticationSystemWorkerSalary"
+                    value={formData.authenticationSystemWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Cтоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="authenticationSystemSubscription"
+                    value={formData.authenticationSystemSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -270,7 +498,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ------------------------ Защита электронной почты ------------------------ */}
+{/* ----------- Решения для защиты электронной почты ----------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -280,18 +508,48 @@ function PersonnelForm({ onCalculate }) {
                   checked={formData.hasEmailProtection}
                   onChange={handleBoolChange}
                 />
-                <h4>Защита электронной почты</h4>
+                <h4>Решения для защиты электронной почты</h4>
               </label>
             </div>
 
             {formData.hasEmailProtection && (
               <div>
                 <div className="form-group">
-                  <label>Стоимость Защиты электронной почты:</label>
+                  <label>Стоимость решения:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
-                    value={formData.emailProtectionPrice}
+                    name="emailSecurityPrice"
+                    value={formData.emailSecurityPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="emailSecurityPeriod"
+                    value={formData.emailSecurityPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="emailSecurityWorkerSalary"
+                    value={formData.emailSecurityWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Cтоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="emailSecuritySubscription"
+                    value={formData.emailSecuritySubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -300,7 +558,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ------------------------ Vulnerability System ------------------------ */}
+{/* ------------- Системы управления уязвимостями -------------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -310,7 +568,7 @@ function PersonnelForm({ onCalculate }) {
                   checked={formData.hasVulnerabilitySystem}
                   onChange={handleBoolChange}
                 />
-                <h4>Система уязвимостей</h4>
+                <h4>Системы управления уязвимостями</h4>
               </label>
             </div>
 
@@ -320,8 +578,38 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость Системы уязвимостей:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="vulnerabilitySystemPrice"
                     value={formData.vulnerabilitySystemPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="vulnerabilitySystemPeriod"
+                    value={formData.vulnerabilitySystemPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="vulnerabilitySystemWorkerSalary"
+                    value={formData.vulnerabilitySystemWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Cтоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="vulnerabilitySystemSubscription"
+                    value={formData.vulnerabilitySystemSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -330,7 +618,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ------------------------ Backup System ------------------------ */}
+{/* ----------------------- Backup System ---------------------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -350,8 +638,38 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость Системы резервного копирования:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="backupSystemPrice"
                     value={formData.backupSystemPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="backupSystemPeriod"
+                    value={formData.backupSystemPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="backupSystemWorkerSalary"
+                    value={formData.backupSystemWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Стоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="backupSystemSubscription"
+                    value={formData.backupSystemSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -360,7 +678,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ------------------------ AntiExploitSoftware ------------------------ */}
+{/* ------- Резервное копирование и восстановление данных ------ */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -370,18 +688,58 @@ function PersonnelForm({ onCalculate }) {
                   checked={formData.hasAntiExploitSoftware}
                   onChange={handleBoolChange}
                 />
-                <h4>AntiExploitSoftware</h4>
+                <h4>Резервное копирование и восстановление данных</h4>
               </label>
             </div>
 
             {formData.hasAntiExploitSoftware && (
               <div>
                 <div className="form-group">
-                  <label>Стоимость AntiExploitSoftware:</label>
+                  <label>Стоимость копирования:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="antiExploitSoftwarePrice"
                     value={formData.antiExploitSoftwarePrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwarePeriod"
+                    value={formData.antiExploitSoftwarePeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwareWorkerSalary"
+                    value={formData.antiExploitSoftwareWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwareSubscription"
+                    value={formData.antiExploitSoftwareSubscription}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Стоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwareSubscription"
+                    value={formData.antiExploitSoftwareSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -390,7 +748,67 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- SIEM ------------------------------- */}
+{/* -------------------- Анти-эксплойт ПО ---------------------- */}
+          <div className="form-section">
+            <div className="checkbox-group">
+              <label className='toggle-label'>
+                <input
+                  type="checkbox"
+                  name="hasAntiExploitSoftware"
+                  checked={formData.hasAntiExploitSoftware}
+                  onChange={handleBoolChange}
+                />
+                <h4>Анти-эксплойт ПО</h4>
+              </label>
+            </div>
+
+            {formData.hasAntiExploitSoftware && (
+              <div>
+                <div className="form-group">
+                  <label>Стоимость:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwarePrice"
+                    value={formData.antiExploitSoftwarePrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwarePeriod"
+                    value={formData.antiExploitSoftwarePeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwareWorkerSalary"
+                    value={formData.antiExploitSoftwareWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Стоимость подписок и лицензий:</label>
+                  <input
+                    type="number"
+                    name="antiExploitSoftwareSubscription"
+                    value={formData.antiExploitSoftwareSubscription}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+{/* ------------------------------------------------------------ */}
+{/* ---- Средства мониторинга и анализа безопасности (SIEM) ---- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -400,18 +818,48 @@ function PersonnelForm({ onCalculate }) {
                   checked={formData.hasSIEM}
                   onChange={handleBoolChange}
                 />
-                <h4>SIEM</h4>
+                <h4>Средства мониторинга и анализа безопасности (SIEM)</h4>
               </label>
             </div>
 
             {formData.hasSIEM && (
               <div>
                 <div className="form-group">
-                  <label>Стоимость SIEM:</label>
+                  <label>Стоимость:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="siemPrice"
                     value={formData.siemPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="siemPeriod"
+                    value={formData.siemPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="siemWorkerSalary"
+                    value={formData.siemWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="siemSubscription"
+                    value={formData.siemSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -420,7 +868,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}    
-{/* ----------------------- SOAR ------------------------------- */}
+{/* - Платформы для управления инцидентами безопасности (SOAR) - */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -440,8 +888,38 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость SOAR:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="soarPrice"
                     value={formData.soarPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="soarPeriod"
+                    value={formData.soarPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="soarWorkerSalary"
+                    value={formData.soarWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="soarSubscription"
+                    value={formData.soarSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -450,7 +928,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- WAF ------------------------------- */}
+{/* -------- Инструменты для защиты веб-приложений (WAF) ------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -470,8 +948,38 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость WAF:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="wafPrice"
                     value={formData.wafPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="wafPeriod"
+                    value={formData.wafPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="wafWorkerSalary"
+                    value={formData.wafWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="wafSubscription"
+                    value={formData.wafSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -480,7 +988,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- DLP ------------------------------- */}
+{/* -------- Средства для защиты от утечек данных (DLP) -------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -500,8 +1008,38 @@ function PersonnelForm({ onCalculate }) {
                   <label>Стоимость DLP:</label>
                   <input
                     type="number"
-                    name="antivirusPrice"
+                    name="dlpPrice"
                     value={formData.dlpPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="dlpPeriod"
+                    value={formData.dlpPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="dlpWorkerSalary"
+                    value={formData.dlpWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="dlpSubscription"
+                    value={formData.dlpSubscription}
                     onChange={handleChange}
                     min="0"
                   />
@@ -510,7 +1048,7 @@ function PersonnelForm({ onCalculate }) {
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- PenTesting ------------------------------- */}
+{/* -------------- Тестирование на проникновение --------------- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -536,11 +1074,41 @@ function PersonnelForm({ onCalculate }) {
                     min="0"
                   />
                 </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="penTestingPeriod"
+                    value={formData.penTestingPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="penTestingWorkerSalary"
+                    value={formData.penTestingWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="penTestingSubscription"
+                    value={formData.penTestingSubscription}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
               </div>
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- Botnet Security ------------------------------- */}
+{/* ---------------- Защита от ботнетов ------------------------ */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -566,11 +1134,41 @@ function PersonnelForm({ onCalculate }) {
                     min="0"
                   />
                 </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="botnetSecurityPeriod"
+                    value={formData.botnetSecurityPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="botnetSecurityWorkerSalary"
+                    value={formData.botnetSecurityWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="botnetSecuritySubscription"
+                    value={formData.botnetSecuritySubscription}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
               </div>
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- CryptographicKeySystem ------------------------------- */}
+{/* ---- Системы для управления криптографическими ключами ----- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -596,11 +1194,41 @@ function PersonnelForm({ onCalculate }) {
                     min="0"
                   />
                 </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="cryptographicKeySystemPeriod"
+                    value={formData.cryptographicKeySystemPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="cryptographicKeySystemWorkerSalary"
+                    value={formData.cryptographicKeySystemWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="cryptographicKeySystemSubscription"
+                    value={formData.cryptographicKeySystemSubscription}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
               </div>
             )}
           </div>
 {/* ------------------------------------------------------------ */}
-{/* ----------------------- SafetyStandartMeans ------------------------------- */}
+{/* -- Средства для соблюдения норм и стандартов безопасности -- */}
           <div className="form-section">
             <div className="checkbox-group">
               <label className='toggle-label'>
@@ -622,6 +1250,36 @@ function PersonnelForm({ onCalculate }) {
                     type="number"
                     name="antivirusPrice"
                     value={formData.safetyStandartMeansPrice}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Срок установки и настройки:</label>
+                  <input
+                    type="number"
+                    name="safetyStandartMeansPeriod"
+                    value={formData.safetyStandartMeansPeriod}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Заработная плату сотрудника:</label>
+                  <input
+                    type="number"
+                    name="safetyStandartMeansWorkerSalary"
+                    value={formData.safetyStandartMeansWorkerSalary}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Количество сотрудников:</label>
+                  <input
+                    type="number"
+                    name="safetyStandartMeansSubscription"
+                    value={formData.safetyStandartMeansSubscription}
                     onChange={handleChange}
                     min="0"
                   />
