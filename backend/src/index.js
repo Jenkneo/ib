@@ -14,7 +14,15 @@ const PORT = process.env.PORT || 3000;
 initializeDatabase();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+      'https://ib.jenkneo.ru', // Ваш продакшен-домен
+      'http://localhost:3000', // Локальная версия фронтенда
+  ],
+  methods: ['GET', 'POST', 'PUT'], // Разрешенные методы
+  allowedHeaders: ['Content-Type', 'Authorization'], // Разрешенные заголовки
+  credentials: true, // Если нужно передавать куки или авторизацию
+}));
 app.use(express.json());
 
 // Routes
