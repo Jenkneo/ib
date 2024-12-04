@@ -15,13 +15,10 @@ initializeDatabase();
 
 // Middleware
 app.use(cors({
-  origin: [
-      'https://ib.jenkneo.ru', // Ваш продакшен-домен
-      'http://localhost:3000', // Локальная версия фронтенда
-  ],
-  methods: ['GET', 'POST', 'PUT'], // Разрешенные методы
-  allowedHeaders: ['Content-Type', 'Authorization'], // Разрешенные заголовки
-  credentials: true, // Если нужно передавать куки или авторизацию
+  origin: ['https://ib.jenkneo.ru', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control'], // Добавляем Cache-Control
+  credentials: true,
 }));
 app.use(express.json());
 
