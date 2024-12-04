@@ -23,7 +23,7 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             push: true
-            context: .
+            context: ./frontend/
             tags: ${{ secrets.DOCKER_USERNAME }}/info-security-project:latest
 
     build_and_push_backend_to_docker_hub:
@@ -43,5 +43,5 @@ jobs:
           uses: docker/build-push-action@v4
           with:
             push: true
-            context: .
+            context: ./backend/
             tags: ${{ secrets.DOCKER_USERNAME }}/info-security-backend:latest
