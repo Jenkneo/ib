@@ -9,117 +9,112 @@ function ExpensesForm({ onCalculate }) {
     antivirusPrice: 0,
     antivirusPeriod: 0,
     antivirusWorkerSalary: 0,
-    antivirusSubscription: 0,
 
     hasFirewall: false,
     firewallPrice: 0,
     firewallPeriod: 0,
     firewallWorkerSalary: 0,
-    firewallSubscription: 0,
     
     hasPreventionSystem: false,
     preventionSystemPrice: 0,
     preventionSystemPeriod: 0,
     preventionSystemWorkerSalary: 0,
-    preventionSystemSubscription: 0,
 
     hasEncryption: false,
     encryptionPrice: 0,
     encryptionPeriod: 0,
     encryptionWorkerSalary: 0,
-    encryptionSubscription: 0,
 
     hasAuthenticationSystem: false,
     authenticationSystemPrice: 0,
     authenticationSystemPeriod: 0,
     authenticationSystemWorkerSalary: 0,
-    authenticationSystemSubscription: 0,
 
     hasEmailSecurity: false,
     emailSecurityPrice: 0,
     emailSecurityPeriod: 0,
     emailSecurityWorkerSalary: 0,
-    emailSecuritySubscription: 0,
 
     hasVulnerabilitySystem: false,
     vulnerabilitySystemPrice: 0,
     vulnerabilitySystemPeriod: 0,
     vulnerabilitySystemWorkerSalary: 0,
-    vulnerabilitySystemSubscription: 0,
 
     hasBackupSystem: false,
     backupSystemPrice: 0,
     backupSystemPeriod: 0,
     backupSystemWorkerSalary: 0,
-    backupSystemSubscription: 0,
 
     hasAntiExploitSoftware: false,
     antiExploitSoftwarePrice: 0,
     antiExploitSoftwarePeriod: 0,
     antiExploitSoftwareWorkerSalary: 0,
-    antiExploitSoftwareSubscription: 0,
 
     hasSIEM: false,
     siemPrice: 0,
     siemPeriod: 0,
     siemWorkerSalary: 0,
-    siemSubscription: 0,
 
     hasSOAR: false,
     soarPrice: 0,
     soarPeriod: 0,
     soarWorkerSalary: 0,
-    soarSubscription: 0,
 
     hasWAF: false,
     wafPrice: 0,
     wafPeriod: 0,
     wafWorkerSalary: 0,
-    wafSubscription: 0,
 
     hasDLP: false,
     dlpPrice: 0,
     dlpPeriod: 0,
     dlpWorkerSalary: 0,
-    dlpSubscription: 0,
 
     hasPenTesting: false,
     penTestingPrice: 0,
     penTestingPeriod: 0,
     penTestingWorkerSalary: 0,
-    penTestingSubscription: 0,
 
     hasBotnetSecurity: false,
     botnetSecurityPrice: 0,
     botnetSecurityPeriod: 0,
     botnetSecurityWorkerSalary: 0,
-    botnetSecuritySubscription: 0,
 
     hasCryptographicKeySystem: false,
     cryptographicKeySystemPrice: 0,
     cryptographicKeySystemPeriod: 0,
     cryptographicKeySystemWorkerSalary: 0,
-    cryptographicKeySystemSubscription: 0,
 
     hasSafetyStandartMeans: false,
     safetyStandartMeansPrice: 0,
     safetyStandartMeansPeriod: 0,
     safetyStandartMeansWorkerSalary: 0,
-    safetyStandartMeansSubscription: 0
   });
 
   const calculateTotal = useCallback(() => {
     if (!isEnabled) return;
+
+    let currentInput = false;
+    let currentPrice = 0;
+    let currentPeriod = 0;
+    let currentWorkerSalary = 0;
     
     const total = Object.entries(formData).reduce((acc, [key, value]) => {
-      if (key.endsWith('Price')) {
-        return acc + value;
-      } else if (key.endsWith('Period') && formData[`${key.slice(0, -6)}Subscription`]) {
-        return acc + value * formData[`${key.slice(0, -6)}Subscription`];
-      } else if (key.endsWith('WorkerSalary')) {
-        return acc + value;
+      if (key.startsWith('has')) {
+        currentInput = value
+        currentPrice = 0;
+        currentPeriod = 0;
+        currentWorkerSalary = 0;
       }
-      return acc;
+      if (currentInput) {
+        if (key.toLowerCase().includes('price')) currentPrice = value;
+        if (key.toLowerCase().includes('period')) currentPeriod = value;
+        if (key.toLowerCase().includes('workersalary')) currentWorkerSalary = value;
+      }
+      if (key.toLowerCase().includes('workersalary')) {
+        return acc + currentPrice + (currentPeriod * currentWorkerSalary);
+      }
+      return acc
     }, 0);
     
     onCalculate(total);

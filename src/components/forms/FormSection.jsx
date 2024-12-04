@@ -8,6 +8,7 @@ const FormSection = ({
   fields,
   onFieldChange,
 }) => {
+  console.log(fields);
   return (
     <div className="form-section">
       <div className="checkbox-group">
@@ -36,6 +37,9 @@ const FormSection = ({
               />
             </div>
           ))}
+          <div>
+            Общая стоимость: {fields[0].value + fields[1].value * fields[2].value}
+          </div>
         </div>
       )}
     </div>

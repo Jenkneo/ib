@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
+import { updateProfile } from '../services/api';
 
 function Profile({ user, onUpdateProfile }) {
   const [formData, setFormData] = useState({
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    organization: user.organization || '',
-    industry: user.industry || '',
+    organizationName: user.organizationName || '',
+    industryType: user.industryType || '',
     annualBudget: user.annualBudget || '',
     securityBudget: user.securityBudget || '',
-    organizationSize: user.organizationSize || 'Маленький'
+    organizationSize: user.organizationSize || 'small'
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const organizationSizes = [
-    { value: 'Маленький', label: 'Маленький' },
-    { value: 'Средний', label: 'Средний' },
-    { value: 'Большой', label: 'Большой' }
+    { value: 'small', label: 'Маленький' },
+    { value: 'medium', label: 'Средний' },
+    { value: 'large', label: 'Большой' }
   ];
 
   const handleChange = (e) => {
@@ -33,10 +37,29 @@ function Profile({ user, onUpdateProfile }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onUpdateProfile(formData);
-    alert('Профиль успешно обновлен');
+    setIsLoading(true);
+    setError('');
+    setSuccessMessage('');
+
+    try {
+      const profileData = {
+        organizationName: formData.organizationName,
+        industryType: formData.industryType,
+        annualBudget: Number(formData.annualBudget),
+        securityBudget: Number(formData.securityBudget),
+        organizationSize: formData.organizationSize
+      };
+
+      const updatedProfile = await updateProfile(profileData);
+      onUpdateProfile(updatedProfile);
+      setSuccessMessage('Профиль успешно обновлен');
+    } catch (err) {
+      setError(err.message || 'Ошибка при обновлении профиля');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,6 +74,7 @@ function Profile({ user, onUpdateProfile }) {
             value={formData.firstName}
             onChange={handleChange}
             required
+            disabled={true}
           />
         </div>
         <div className="form-group">
@@ -61,6 +85,7 @@ function Profile({ user, onUpdateProfile }) {
             value={formData.lastName}
             onChange={handleChange}
             required
+            disabled={true}
           />
         </div>
         <div className="form-group">
@@ -76,18 +101,20 @@ function Profile({ user, onUpdateProfile }) {
           <label>Название организации:</label>
           <input
             type="text"
-            name="organization"
-            value={formData.organization}
+            name="organizationName"
+            value={formData.organizationName}
             onChange={handleChange}
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
           <label>Тип отрасли:</label>
           <input
             type="text"
-            name="industry"
-            value={formData.industry}
+            name="industryType"
+            value={formData.industryType}
             onChange={handleChange}
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -97,6 +124,7 @@ function Profile({ user, onUpdateProfile }) {
             name="annualBudget"
             value={formData.annualBudget}
             onChange={handleChange}
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -106,6 +134,7 @@ function Profile({ user, onUpdateProfile }) {
             name="securityBudget"
             value={formData.securityBudget}
             onChange={handleChange}
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -115,9 +144,14 @@ function Profile({ user, onUpdateProfile }) {
             onChange={handleSizeChange}
             options={organizationSizes}
             className="react-select"
+            isDisabled={isLoading}
           />
         </div>
-        <button type="submit">Сохранить изменения</button>
+        {error && <div className="error">{error}</div>}
+        {successMessage && <div className="success">{successMessage}</div>}
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Сохранение...' : 'Сохранить изменения'}
+        </button>
       </form>
     </div>
   );

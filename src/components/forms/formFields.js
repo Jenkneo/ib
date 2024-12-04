@@ -16,13 +16,7 @@ const baseFields = [
     type: 'number',
     name: 'workerSalary',
     min: 0,
-  },
-  {
-    label: 'Стоимость подписок и лицензий:',
-    type: 'number',
-    name: 'subscription',
-    min: 0,
-  },
+  }
 ];
 
 const fieldsNames = [

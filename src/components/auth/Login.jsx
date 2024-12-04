@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { login } from '../../services/api';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onLogin(email, password)) {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const { token } = await login(email, password);
+      onLogin(token);
       navigate('/');
-    } else {
-      setError('Неверный email или пароль');
+    } catch (err) {
+      setError(err.message || 'Ошибка при входе');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -27,6 +36,7 @@ function Login({ onLogin }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -36,10 +46,13 @@ function Login({ onLogin }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={isLoading}
           />
         </div>
         {error && <div className="error">{error}</div>}
-        <button type="submit">Войти</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Вход...' : 'Войти'}
+        </button>
         <div className="auth-links">
           <p>Нет аккаунта? <Link to="/register">Зарегистрироваться</Link></p>
         </div>

@@ -1,50 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Calculator from './components/Calculator';
 import Profile from './components/Profile';
 import Header from './components/Header';
+import { getProfile } from './services/api';
 import './index.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleLogin = (email, password) => {
-    // В реальном приложении здесь была бы проверка через API
-    if (email === 'admin@mail.com' && password === 'admin') {
-      setIsAuthenticated(true);
-      setCurrentUser({
-        email: email,
-        firstName: 'Администратор',
-        lastName: 'Системы',
-        organization: 'ООО Защита',
-        industry: 'IT',
-        annualBudget: 10000000,
-        securityBudget: 1000000,
-        organizationSize: 'Средний'
-      });
-      return true;
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      getProfile()
+        .then(userData => {
+          setCurrentUser(userData);
+          setIsAuthenticated(true);
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
     }
-    return false;
+  }, []);
+
+  const handleLogin = (token) => {
+    localStorage.setItem('token', token);
+    setIsAuthenticated(true);
+    // Profile data will be fetched in the useEffect when isAuthenticated changes
   };
 
-  const handleRegister = (userData) => {
-    // В реальном приложении здесь была бы отправка данных на сервер
+  const handleRegister = (token) => {
+    localStorage.setItem('token', token);
     setIsAuthenticated(true);
-    setCurrentUser({
-      ...userData,
-      organization: '',
-      industry: '',
-      annualBudget: 0,
-      securityBudget: 0,
-      organizationSize: 'Маленький'
-    });
-    return true;
+    // Profile data will be fetched in the useEffect when isAuthenticated changes
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     setIsAuthenticated(false);
     setCurrentUser(null);
   };
@@ -52,6 +53,10 @@ function App() {
   const updateUserProfile = (profileData) => {
     setCurrentUser({ ...currentUser, ...profileData });
   };
+
+  if (isLoading) {
+    return <div className="loading">Загрузка...</div>;
+  }
 
   return (
     <Router>

@@ -1,0 +1,1 @@
+export const API_URL = 'http://jenkneo.ru:8080';

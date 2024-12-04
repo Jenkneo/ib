@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { register, login } from '../../services/api';
 
 function Register({ onRegister }) {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ function Register({ onRegister }) {
     password: ''
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,12 +21,27 @@ function Register({ onRegister }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onRegister(formData)) {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // First, register the user
+      await register(formData);
+      
+      // Then, automatically log them in
+      const { token } = await login(formData.email, formData.password);
+      
+      // Update the app state with the token
+      onRegister(token);
+      
+      // Redirect to the main page
       navigate('/');
-    } else {
-      setError('Ошибка при регистрации');
+    } catch (err) {
+      setError(err.message || 'Ошибка при регистрации');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,6 +57,7 @@ function Register({ onRegister }) {
             value={formData.firstName}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -50,6 +68,7 @@ function Register({ onRegister }) {
             value={formData.lastName}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -60,6 +79,7 @@ function Register({ onRegister }) {
             value={formData.email}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
         <div className="form-group">
@@ -70,10 +90,13 @@ function Register({ onRegister }) {
             value={formData.password}
             onChange={handleChange}
             required
+            disabled={isLoading}
           />
         </div>
         {error && <div className="error">{error}</div>}
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
+        </button>
         <div className="auth-links">
           <p>Уже есть аккаунт? <Link to="/login">Войти</Link></p>
         </div>
