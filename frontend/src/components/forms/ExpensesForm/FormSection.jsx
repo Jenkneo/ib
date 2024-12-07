@@ -37,9 +37,9 @@ const FormSection = ({
               />
             </div>
           ))}
-          <div>
+          {/* <div>
             Общая стоимость: {fields[0].value + fields[1].value * fields[2].value}
-          </div>
+          </div> */}
         </div>
       )}
     </div>

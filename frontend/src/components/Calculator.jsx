@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { saveAs } from 'file-saver';
+import ExpensesForm from './forms/ExpensesForm/ExpensesForm';
 // import HardwareForm from './forms/HardwareForm';
-// import SoftwareForm from './forms/SoftwareForm';
-import ExpensesForm from './forms/ExpensesForm';
+import OrganizationInfoForm from './forms/OrganizationInfoForm/OrganizationInfoForm';
 
 function Calculator() {
   const [calculations, setCalculations] = useState({
@@ -46,14 +46,14 @@ function Calculator() {
     <div>
       <h2 className="form-title">Экономика защиты информации</h2>
 
+      <OrganizationInfoForm
+        onCalculate={(value) => handleCalculationUpdate('personnel', value)}
+      />
       <ExpensesForm
         onCalculate={(value) => handleCalculationUpdate('personnel', value)}
       />
       {/* <HardwareForm
         onCalculate={(value) => handleCalculationUpdate('hardware', value)}
-      />
-      <SoftwareForm
-        onCalculate={(value) => handleCalculationUpdate('software', value)}
       /> */}
 
       <div className="total-section">

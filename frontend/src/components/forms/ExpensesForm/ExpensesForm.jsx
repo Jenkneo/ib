@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import FormSection from './FormSection';
-import formFields from './formFields';
+import softwareFormFields from './softwareFormFields';
+import studyStaffFormFields from './studyStaffFormFields';
 
 function ExpensesForm({ onCalculate }) {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -89,6 +90,30 @@ function ExpensesForm({ onCalculate }) {
     safetyStandartMeansPrice: 0,
     safetyStandartMeansPeriod: 0,
     safetyStandartMeansWorkerSalary: 0,
+
+    hasSecurityCourses: false,
+    securityCoursesPrice: 0,
+
+    hasStaffWorkingTime: false,
+    staffWorkingTimePrice: 0,
+
+    hasInnerTraining: false,
+    innerTrainingPrice: 0,
+
+    hasOnlineCourses: false,
+    onlineCoursesPrice: 0,
+
+    hasStudyingSoftware: false,
+    studyingSoftwarePrice: 0,
+
+    hasLabKits: false,
+    labKitsPrice: 0,
+
+    hasSecuritySeminars: false,
+    securitySeminarsPrice: 0,
+
+    hasConferenceTikets: false,
+    conferenceTiketsPrice: 0,
   });
 
   const calculateTotal = useCallback(() => {
@@ -144,93 +169,139 @@ function ExpensesForm({ onCalculate }) {
     }));
   };
 
-  const sections = [
+  const softwareSections = [
     {
       title: 'Антивирус',
       checkboxName: 'hasAntivirus',
-      fields: formFields.antivirusFields,
+      fields: softwareFormFields.antivirusFields,
     },
     {
       title: 'Фаервол',
       checkboxName: 'hasFirewall',
-      fields: formFields.firewallFields,
+      fields: softwareFormFields.firewallFields,
     },
     {
       title: 'Предотвращение',
       checkboxName: 'hasPreventionSystem',
-      fields: formFields.preventionSystemFields,
+      fields: softwareFormFields.preventionSystemFields,
     },
     {
       title: 'Шифрование',
       checkboxName: 'hasEncryption',
-      fields: formFields.encryptionFields,
+      fields: softwareFormFields.encryptionFields,
     },
     {
       title: 'Аутентификация',
       checkboxName: 'hasAuthenticationSystem',
-      fields: formFields.authenticationSystemFields,
+      fields: softwareFormFields.authenticationSystemFields,
     },
     {
       title: 'Безопасность почты',
       checkboxName: 'hasEmailSecurity',
-      fields: formFields.emailSecurityFields,
+      fields: softwareFormFields.emailSecurityFields,
     },
     {
       title: 'Системы управления уязвимостями',
       checkboxName: 'hasVulnerabilitySystem',
-      fields: formFields.vulnerabilitySystemFields,
+      fields: softwareFormFields.vulnerabilitySystemFields,
     },
     {
       title: 'Резервное копирование и восстановление данных',
       checkboxName: 'hasBackupSystem',
-      fields: formFields.backupSystemFields,
+      fields: softwareFormFields.backupSystemFields,
     },
     {
       title: 'Анти-эксплойт ПО',
       checkboxName: 'hasAntiExploitSoftware',
-      fields: formFields.antiExploitSoftwareFields,
+      fields: softwareFormFields.antiExploitSoftwareFields,
     },
     {
       title: 'Средства мониторинга и анализа безопасности (SIEM)',
       checkboxName: 'hasSIEM',
-      fields: formFields.siemFields,
+      fields: softwareFormFields.siemFields,
     },
     {
       title: 'Платформы для управления инцидентами безопасности (SOAR)',
       checkboxName: 'hasSOAR',
-      fields: formFields.soarFields,
+      fields: softwareFormFields.soarFields,
     },
     {
       title: 'Инструменты для защиты веб-приложений (WAF)',
       checkboxName: 'hasWAF',
-      fields: formFields.wafFields,
+      fields: softwareFormFields.wafFields,
     },
     {
       title: 'Системы обнаружения и предотвращения утечек данных (DLP)',
       checkboxName: 'hasDLP',
-      fields: formFields.dlpFields,
+      fields: softwareFormFields.dlpFields,
     },
     {
       title: 'Тестирование на проникновение (Penetration testing)',
       checkboxName: 'hasPenTesting',
-      fields: formFields.penTestingFields,
+      fields: softwareFormFields.penTestingFields,
     },
     {
       title: 'Системы безопасности от ботнет-атак',
       checkboxName: 'hasBotnetSecurity',
-      fields: formFields.botnetSecurityFields,
+      fields: softwareFormFields.botnetSecurityFields,
     },
     {
       title: 'Криптографические системы',
       checkboxName: 'hasCryptographicKeySystem',
-      fields: formFields.cryptographicKeySystemFields,
+      fields: softwareFormFields.cryptographicKeySystemFields,
     },
     {
       title: 'Средства безопасности стандарта (Safety Standart Means)',
       checkboxName: 'hasSafetyStandartMeans',
-      fields: formFields.safetyStandartMeansFields,
+      fields: softwareFormFields.safetyStandartMeansFields,
     },
   ];
+
+  const courseSections = [
+    {
+      title: 'Курсы по информационной безопасности',
+      checkboxName: 'hasSecurityCourses',
+      fields: studyStaffFormFields.securityCoursesFields,
+    },
+    {
+      title: 'Стоимость времени сотрудников',
+      checkboxName: 'hasStaffWorkingTime',
+      fields: studyStaffFormFields.staffWorkingTimeFields,
+    },
+    {
+      title: 'Стоимость внутренних тренингов',
+      checkboxName: 'hasInnerTraining',
+      fields: studyStaffFormFields.innerTrainingFields,
+    },
+    {
+      title: 'Онлайн-курсы и вебинары',
+      checkboxName: 'hasOnlineCourses',
+      fields: studyStaffFormFields.onlineCoursesFields,
+    },
+    {
+      title: 'Программное обеспечение и оборудование для обучения специалистов',
+      checkboxName: 'hasStudyingSoftware',
+      fields: studyStaffFormFields.studyingSoftwareFields,
+    },
+    {
+      title: 'Лабораторные комплекты и платформы для тренингов',
+      checkboxName: 'hasLabKits',
+      fields: studyStaffFormFields.labKitsFields,
+    },
+    {
+      title: 'Участие в конференциях и семинарах по информационной безопасности',
+      checkboxName: 'hasSecuritySeminars',
+      fields: studyStaffFormFields.securitySeminarsFields,
+    },
+    {
+      title: 'Стоимость билетов и участия в конференциях по информационной безопасности',
+      checkboxName: 'hasConferenceTikets',
+      fields: studyStaffFormFields.conferenceTiketsFields,
+    }
+
+  ]
+
+  console.log(courseSections)
 
   return (
     <div className="form-container">
@@ -248,7 +319,7 @@ function ExpensesForm({ onCalculate }) {
       {isEnabled && (
         <div className="form-content">
           <h3 className='form-title'>Расходы на программное обеспечение для информационной безопасности</h3>
-          {sections.map((section, index) => (
+          {softwareSections.map((section, index) => (
             <FormSection
               key={index} // Уникальный ключ для списка
               title={section.title}
@@ -263,6 +334,20 @@ function ExpensesForm({ onCalculate }) {
             />
           ))}
           <h3 className='form-title'>Расходы на обучение специалистов по информационной безопасности</h3>
+          {courseSections.map((section, index) => (
+            <FormSection
+              key={index} // Уникальный ключ для списка
+              title={section.title}
+              checkboxName={section.checkboxName}
+              isChecked={formData[section.checkboxName]}
+              onCheckboxChange={handleBoolChange}
+              fields={section.fields.map((field) => ({
+                ...field,
+                value: formData[field.name],
+              }))}
+              onFieldChange={handleChange}
+            />
+          ))}
         </div>
       )}
     </div>
