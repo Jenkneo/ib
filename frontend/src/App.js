@@ -13,35 +13,38 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const loadUserProfile = async () => {
+    try {
+      const userData = await getProfile();
+      setCurrentUser(userData);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      localStorage.removeItem('token');
+      setIsAuthenticated(false);
+      setCurrentUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      getProfile()
-        .then(userData => {
-          setCurrentUser(userData);
-          setIsAuthenticated(true);
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      loadUserProfile();
     } else {
       setIsLoading(false);
     }
   }, []);
 
-  const handleLogin = (token) => {
+  const handleLogin = async (token) => {
     localStorage.setItem('token', token);
-    setIsAuthenticated(true);
-    // Profile data will be fetched in the useEffect when isAuthenticated changes
+    await loadUserProfile();
   };
 
-  const handleRegister = (token) => {
+  const handleRegister = async (token) => {
     localStorage.setItem('token', token);
-    setIsAuthenticated(true);
-    // Profile data will be fetched in the useEffect when isAuthenticated changes
+    await loadUserProfile();
   };
 
   const handleLogout = () => {
@@ -51,7 +54,10 @@ function App() {
   };
 
   const updateUserProfile = (profileData) => {
-    setCurrentUser({ ...currentUser, ...profileData });
+    setCurrentUser(prevUser => ({
+      ...prevUser,
+      ...profileData
+    }));
   };
 
   if (isLoading) {

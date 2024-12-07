@@ -31,11 +31,16 @@ export async function register(userData) {
 }
 
 export async function updateProfile(profileData) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Не авторизован');
+  }
+
   const response = await fetch(`${API_URL}/profile`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(profileData),
   });
@@ -43,9 +48,14 @@ export async function updateProfile(profileData) {
 }
 
 export async function getProfile() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('Не авторизован');
+  }
+
   const response = await fetch(`${API_URL}/profile`, {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
   return handleResponse(response);
