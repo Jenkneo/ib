@@ -3,8 +3,8 @@ import Select from 'react-select';
 
 function ExpensesForm({ onCalculate }) {
   const [formData, setFormData] = useState({
-    organizationName: 'фыв',
-    industryType: 'фыв',
+    organizationName: '',
+    industryType: '',
     annualBudget: 0,
     securityBudget: 0,
     organizationSize: 'small'
