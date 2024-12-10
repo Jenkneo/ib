@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import FormSection from './FormSection';
-import softwareFormFields from './softwareFormFields';
-import studyStaffFormFields from './studyStaffFormFields';
-import hardwareFormFields from './hardwareFormFields';
-import operatingExpensesFormFields from './operatingExpensesFormFields';
-import cyberAttackFormFields from './cyberAttackFormFields';
+import { softwareSections, hardwareSections, operatingExpensesSections, cyberAttackSections, courseSections } from './sections';
 
 function ExpensesForm({ onCalculate }) {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -152,6 +148,14 @@ function ExpensesForm({ onCalculate }) {
     scannerWorkerSalary: 0,
     scannerPower: 0,
 
+    hasKeyboard: false,
+    keyboardPrice: 0,
+    keyboardLiquidationPrice: 0,
+    keyboardUsageTime: 0,
+    keyboardInstallationTime: 0,
+    keyboardWorkerSalary: 0,
+    keyboardPower: 0,
+
     hasWebCamera: false,
     webCameraPrice: 0,
     webCameraLiquidationPrice: 0,
@@ -200,6 +204,22 @@ function ExpensesForm({ onCalculate }) {
     cartridgesWorkerSalary: 0,
     cartridgesPower: 0,
 
+    hasConference: false,
+    conferencePrice: 0,
+    conferenceLiquidationPrice: 0,
+    conferenceUsageTime: 0,
+    conferenceInstallationTime: 0,
+    conferenceWorkerSalary: 0,
+    conferencePower: 0,
+
+    hasNetworkStorage: false,
+    networkStoragePrice: 0,
+    networkStorageLiquidationPrice: 0,
+    networkStorageUsageTime: 0,
+    networkStorageInstallationTime: 0,
+    networkStorageWorkerSalary: 0,
+    networkStoragePower: 0,
+
     hasVideoArchive: false,
     videoArchivePrice: 0,
     videoArchiveLiquidationPrice: 0,
@@ -216,43 +236,24 @@ function ExpensesForm({ onCalculate }) {
     securitySystemWorkerSalary: 0,
     securitySystemPower: 0,
 
-    hasStaffSalary: false,
-    staffSalaryPrice: 0,
+    hasWorker: false,
+    workerPrice: 0,
+    workerAmount: 0,
 
-    hasInfrastructureMaintenance: false,
-    infrastructureMaintenancePrice: 0,
+    hasContractsPenalty: false,
+    contractsPenaltyPrice: 0,
 
-    hasExternalServices: false,
-    externalServicesPrice: 0,
-
-    hasSubscriptionsLicenses: false,
-    subscriptionsLicensesPrice: 0,
-
-    hasSecuritySystemUpgrade: false,
-    securitySystemUpgradePrice: 0,
-
-    hasOtherOperatingExpenses: false,
-    otherOperatingExpensesPrice: 0,
-    hasFinancialLosses: false,
-    financialLossesPrice: 0,
-
-    hasDowntimeLosses: false,
-    downtimeLossesPrice: 0,
+    hasLegalConsequences: false,
+    legalConsequencesPrice: 0,
 
     hasReputationLosses: false,
     reputationLossesPrice: 0,
 
-    hasLegalConsequencesLosses: false,
-    legalConsequencesLossesPrice: 0,
-
     hasDataLosses: false,
     dataLossesPrice: 0,
 
-    hasContractPenaltyLosses: false,
-    contractPenaltyLossesPrice: 0,
-
-    hasCustomerLosses: false,
-    customerLossesPrice: 0,
+    hasDowntimeLosses: false,
+    downtimeLossesPrice: 0,
   });
 
   const calculateTotal = useCallback(() => {
@@ -308,272 +309,6 @@ function ExpensesForm({ onCalculate }) {
     }));
   };
 
-  const softwareSections = [
-    {
-      title: 'Антивирус',
-      checkboxName: 'hasAntivirus',
-      fields: softwareFormFields.antivirusFields,
-    },
-    {
-      title: 'Фаервол',
-      checkboxName: 'hasFirewall',
-      fields: softwareFormFields.firewallFields,
-    },
-    {
-      title: 'Предотвращение',
-      checkboxName: 'hasPreventionSystem',
-      fields: softwareFormFields.preventionSystemFields,
-    },
-    {
-      title: 'Шифрование',
-      checkboxName: 'hasEncryption',
-      fields: softwareFormFields.encryptionFields,
-    },
-    {
-      title: 'Аутентификация',
-      checkboxName: 'hasAuthenticationSystem',
-      fields: softwareFormFields.authenticationSystemFields,
-    },
-    {
-      title: 'Безопасность почты',
-      checkboxName: 'hasEmailSecurity',
-      fields: softwareFormFields.emailSecurityFields,
-    },
-    {
-      title: 'Системы управления уязвимостями',
-      checkboxName: 'hasVulnerabilitySystem',
-      fields: softwareFormFields.vulnerabilitySystemFields,
-    },
-    {
-      title: 'Резервное копирование и восстановление данных',
-      checkboxName: 'hasBackupSystem',
-      fields: softwareFormFields.backupSystemFields,
-    },
-    {
-      title: 'Анти-эксплойт ПО',
-      checkboxName: 'hasAntiExploitSoftware',
-      fields: softwareFormFields.antiExploitSoftwareFields,
-    },
-    {
-      title: 'Средства мониторинга и анализа безопасности (SIEM)',
-      checkboxName: 'hasSIEM',
-      fields: softwareFormFields.siemFields,
-    },
-    {
-      title: 'Платформы для управления инцидентами безопасности (SOAR)',
-      checkboxName: 'hasSOAR',
-      fields: softwareFormFields.soarFields,
-    },
-    {
-      title: 'Инструменты для защиты веб-приложений (WAF)',
-      checkboxName: 'hasWAF',
-      fields: softwareFormFields.wafFields,
-    },
-    {
-      title: 'Системы обнаружения и предотвращения утечек данных (DLP)',
-      checkboxName: 'hasDLP',
-      fields: softwareFormFields.dlpFields,
-    },
-    {
-      title: 'Тестирование на проникновение (Penetration testing)',
-      checkboxName: 'hasPenTesting',
-      fields: softwareFormFields.penTestingFields,
-    },
-    {
-      title: 'Системы безопасности от ботнет-атак',
-      checkboxName: 'hasBotnetSecurity',
-      fields: softwareFormFields.botnetSecurityFields,
-    },
-    {
-      title: 'Криптографические системы',
-      checkboxName: 'hasCryptographicKeySystem',
-      fields: softwareFormFields.cryptographicKeySystemFields,
-    },
-    {
-      title: 'Средства безопасности стандарта (Safety Standart Means)',
-      checkboxName: 'hasSafetyStandartMeans',
-      fields: softwareFormFields.safetyStandartMeansFields,
-    },
-  ];
-
-  const courseSections = [
-    {
-      title: 'Курсы по информационной безопасности',
-      checkboxName: 'hasSecurityCourses',
-      fields: studyStaffFormFields.securityCoursesFields,
-    },
-    {
-      title: 'Стоимость времени сотрудников',
-      checkboxName: 'hasStaffWorkingTime',
-      fields: studyStaffFormFields.staffWorkingTimeFields,
-    },
-    {
-      title: 'Стоимость внутренних тренингов',
-      checkboxName: 'hasInnerTraining',
-      fields: studyStaffFormFields.innerTrainingFields,
-    },
-    {
-      title: 'Онлайн-курсы и вебинары',
-      checkboxName: 'hasOnlineCourses',
-      fields: studyStaffFormFields.onlineCoursesFields,
-    },
-    {
-      title: 'Программное обеспечение и оборудование для обучения специалистов',
-      checkboxName: 'hasStudyingSoftware',
-      fields: studyStaffFormFields.studyingSoftwareFields,
-    },
-    {
-      title: 'Лабораторные комплекты и платформы для тренингов',
-      checkboxName: 'hasLabKits',
-      fields: studyStaffFormFields.labKitsFields,
-    },
-    {
-      title: 'Участие в конференциях и семинарах по информационной безопасности',
-      checkboxName: 'hasSecuritySeminars',
-      fields: studyStaffFormFields.securitySeminarsFields,
-    },
-    {
-      title: 'Стоимость билетов и участия в конференциях по информационной безопасности',
-      checkboxName: 'hasConferenceTikets',
-      fields: studyStaffFormFields.conferenceTiketsFields,
-    }
-  ]
-
-  const hardwareSections = [
-    {
-      title: 'Персональные компьютеры',
-      checkboxName: 'hasComputer',
-      fields: hardwareFormFields.computerFields,
-    },
-    {
-      title: 'Экраны',
-      checkboxName: 'hasScreen',
-      fields: hardwareFormFields.screenFields,
-    },
-    {
-      title: 'Принтеры',
-      checkboxName: 'hasPrinter',
-      fields: hardwareFormFields.printerFields,
-    },
-    {
-      title: 'Сканеры',
-      checkboxName: 'hasScanner',
-      fields: hardwareFormFields.scannerFields,
-    },
-    {
-      title: 'Веб-камеры',
-      checkboxName: 'hasWebCamera',
-      fields: hardwareFormFields.webCameraFields,
-    },
-    {
-      title: 'Сетевые устройства',
-      checkboxName: 'hasNetworkDevices',
-      fields: hardwareFormFields.networkDevicesFields,
-    },
-    {
-      title: 'Источники питания',
-      checkboxName: 'hasPowerSupply',
-      fields: hardwareFormFields.powerSupplyFields,
-    },
-    {
-      title: 'Проекторы',
-      checkboxName: 'hasProjector',
-      fields: hardwareFormFields.projectorFields,
-    },
-    {
-      title: 'Видеоконтроль',
-      checkboxName: 'hasVideoControl',
-      fields: hardwareFormFields.videoControlFields,
-    },
-    {
-      title: 'Картриджи',
-      checkboxName: 'hasCartridges',
-      fields: hardwareFormFields.cartridgesFields,
-    },
-    {
-      title: 'Видеозапись',
-      checkboxName: 'hasVideoArchive',
-      fields: hardwareFormFields.videoArchiveFields,
-    },
-    {
-      title: 'Система безопасности',
-      checkboxName: 'hasSecuritySystem',
-      fields: hardwareFormFields.securitySystemFields,
-    }
-  ]
-
-  const operatingExpensesSections = [
-    {
-      title: 'Заработная плата сотрудников',
-      checkboxName: 'hasStaffSalary',
-      fields: operatingExpensesFormFields.staffSalaryFields,
-    }
-    ,
-    {
-      title: 'Обслуживание оборудования и инфраструктуры',
-      checkboxName: 'hasInfrastructureMaintenance',
-      fields: operatingExpensesFormFields.infrastructureMaintenanceFields,
-    },
-    {
-      title: 'Внешние сервисы и консультанты',
-      checkboxName: 'hasExternalServices',
-      fields: operatingExpensesFormFields.externalServicesFields,
-    },
-    {
-      title: 'Подписки и лицензии',
-      checkboxName: 'hasSubscriptionsLicenses',
-      fields: operatingExpensesFormFields.subscriptionsLicensesFields,
-    },
-    {
-      title: 'Обслуживание и модернизация системы безопасности',
-      checkboxName: 'hasSecuritySystemUpgrade',
-      fields: operatingExpensesFormFields.securitySystemUpgradeFields,
-    },
-    {
-      title: 'Прочие операционные расходы',
-      checkboxName: 'hasOtherOperatingExpenses',
-      fields: operatingExpensesFormFields.otherOperatingExpensesFields,
-    },
-  ]
-
-  const cyberAttackSections = [
-    {
-      title: 'Финансовые потери',
-      checkboxName: 'hasFinancialLosses',
-      fields: cyberAttackFormFields.financialLossesFields,
-    },
-    {
-      title: 'Потери из-за простоя',
-      checkboxName: 'hasDowntimeLosses',
-      fields: cyberAttackFormFields.downtimeLossesFields,
-    },
-    {
-      title: 'Потери репутации',
-      checkboxName: 'hasReputationLosses',
-      fields: cyberAttackFormFields.reputationLossesFields,
-    },
-    {
-      title: 'Юридические последствия',
-      checkboxName: 'hasLegalConsequencesLosses',
-      fields: cyberAttackFormFields.legalConsequencesLossesFields,
-    },
-    {
-      title: 'Потери данных',
-      checkboxName: 'hasDataLosses',
-      fields: cyberAttackFormFields.dataLossesFields,
-    },
-    {
-      title: 'Штрафные санкции по контрактам',
-      checkboxName: 'hasContractPenaltyLosses',
-      fields: cyberAttackFormFields.contractPenaltyLossesFields,
-    },
-    {
-      title: 'Потери клиентов',
-      checkboxName: 'hasCustomerLosses',
-      fields: cyberAttackFormFields.customerLossesFields,
-    },
-  ]
-
   return (
     <div className="form-container">
       <div className="form-header">
@@ -605,6 +340,33 @@ function ExpensesForm({ onCalculate }) {
             />
           ))}
 
+          <h3 className='form-title'>Расходы на офисное ЭВО</h3>
+          <div className="form-group">
+            <label>Стоимость электричества:</label>
+            <input
+              type="number"
+              name="electricityCost"
+              value={formData.electricityCost}
+              onChange={handleChange}
+              min="0"
+            />
+          </div>
+
+          {hardwareSections.map((section, index) => (
+            <FormSection
+              key={index} // Уникальный ключ для списка
+              title={section.title}
+              checkboxName={section.checkboxName}
+              isChecked={formData[section.checkboxName]}
+              onCheckboxChange={handleBoolChange}
+              fields={section.fields.map((field) => ({
+                ...field,
+                value: formData[field.name],
+              }))}
+              onFieldChange={handleChange}
+            />
+          ))}
+
           <h3 className='form-title'>Расходы на обучение специалистов по информационной безопасности</h3>
           {courseSections.map((section, index) => (
             <FormSection
@@ -621,20 +383,8 @@ function ExpensesForm({ onCalculate }) {
             />
           ))}
 
-          <h3 className='form-title'>Расходы на офисное ЭВО</h3>
-
-          <div className="form-group">
-            <label>Стоимость электричества:</label>
-            <input
-              type="number"
-              name="electricityCost"
-              value={formData.electricityCost}
-              onChange={handleChange}
-              min="0"
-            />
-          </div>
-
-          {hardwareSections.map((section, index) => (
+          <h3 className='form-title'>Потенциальные убытки от кибератак</h3>
+          {cyberAttackSections.map((section, index) => (
             <FormSection
               key={index} // Уникальный ключ для списка
               title={section.title}
@@ -665,21 +415,7 @@ function ExpensesForm({ onCalculate }) {
             />
           ))}
 
-          <h3 className='form-title'>Потенциальные убытки от кибератак</h3>
-          {cyberAttackSections.map((section, index) => (
-            <FormSection
-              key={index} // Уникальный ключ для списка
-              title={section.title}
-              checkboxName={section.checkboxName}
-              isChecked={formData[section.checkboxName]}
-              onCheckboxChange={handleBoolChange}
-              fields={section.fields.map((field) => ({
-                ...field,
-                value: formData[field.name],
-              }))}
-              onFieldChange={handleChange}
-            />
-          ))}
+
         </div>
       )}
     </div>

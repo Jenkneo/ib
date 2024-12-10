@@ -1,21 +1,20 @@
 const baseFields = [
   {
-    label: 'Расходы:',
+    label: 'Стоимость обучения для 1-го сотрудника:',
     type: 'number',
     name: 'price',
+    min: 0,
+  },
+  {
+    label: 'Количество сотрудников:',
+    type: 'number',
+    name: 'amount',
     min: 0,
   },
 ];
 
 const fieldsNames = [
-  'securityCourses',
-  'staffWorkingTime',
-  'innerTraining',
-  'onlineCourses',
-  'studyingSoftware',
-  'labKits',
-  'securitySeminars',
-  'conferenceTikets',
+  'worker',
 ];
 
 const formFields = fieldsNames.reduce((acc, name) => ({

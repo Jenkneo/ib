@@ -5,6 +5,7 @@ import ExpensesForm from './forms/ExpensesForm/ExpensesForm';
 import OrganizationInfoForm from './forms/OrganizationInfoForm/OrganizationInfoForm';
 import TCOForm from './forms/TCOForm/TCOForm';
 import BusinessContinuityForm from './forms/BusinessContinuityForm/BusinessContinuityForm';
+import RecoveryForm from './forms/RecoveryForm/RecoveryForm';
 
 function Calculator() {
   const [calculations, setCalculations] = useState({
@@ -58,6 +59,9 @@ function Calculator() {
         onCalculate={(value) => handleCalculationUpdate('software', value)}
       />
       <BusinessContinuityForm
+        onCalculate={(value) => handleCalculationUpdate('software', value)}
+      />
+      <RecoveryForm
         onCalculate={(value) => handleCalculationUpdate('software', value)}
       />
       {/* <HardwareForm
