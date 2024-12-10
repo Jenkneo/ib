@@ -3,9 +3,6 @@ import { saveAs } from 'file-saver';
 import ExpensesForm from './forms/ExpensesForm/ExpensesForm';
 // import HardwareForm from './forms/HardwareForm';
 import OrganizationInfoForm from './forms/OrganizationInfoForm/OrganizationInfoForm';
-import TCOForm from './forms/TCOForm/TCOForm';
-import BusinessContinuityForm from './forms/BusinessContinuityForm/BusinessContinuityForm';
-import RecoveryForm from './forms/RecoveryForm/RecoveryForm';
 
 function Calculator() {
   const [calculations, setCalculations] = useState({
@@ -54,15 +51,6 @@ function Calculator() {
       />
       <ExpensesForm
         onCalculate={(value) => handleCalculationUpdate('personnel', value)}
-      />
-      <TCOForm
-        onCalculate={(value) => handleCalculationUpdate('software', value)}
-      />
-      <BusinessContinuityForm
-        onCalculate={(value) => handleCalculationUpdate('software', value)}
-      />
-      <RecoveryForm
-        onCalculate={(value) => handleCalculationUpdate('software', value)}
       />
       {/* <HardwareForm
         onCalculate={(value) => handleCalculationUpdate('hardware', value)}

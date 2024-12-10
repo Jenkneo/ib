@@ -1,23 +1,18 @@
 const baseFields = [
   {
-    label: 'Сумма предотвращенных потерь',
+    label: 'Убытки:',
     type: 'number',
-    name: 'expenses',
-    min: 0,
-  },
-  {
-    label: 'Операционные расходы',
-    type: 'number',
-    name: 'losses',
+    name: 'price',
     min: 0,
   },
 ];
 
 const fieldsNames = [
-  'netProfit',
-  'returnOnInvestment',
-  'downtimeSum',
-  'recoveryCost',
+  'contractsPenalty',
+  'legalConsequences',
+  'reputationLosses',
+  'dataLosses',
+  'downtimeLosses',
 ];
 
 const formFields = fieldsNames.reduce((acc, name) => ({

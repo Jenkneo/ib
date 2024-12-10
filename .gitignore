@@ -27,3 +27,6 @@ yarn-error.log*
 
 backend/.env
 /backend/database.sqlite
+
+# temporary for development
+/frontend/src/config.js
