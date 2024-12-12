@@ -314,3 +314,17 @@ button:disabled {
   font-size: 1.2em;
   color: #666;
 }
+
+.list {
+  padding-left: 25px;
+  margin-bottom: 10px;
+}
+
+.list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.list li {
+  margin-bottom: 0px;
+}

@@ -16,6 +16,17 @@ function ExpensesForm({ onCalculate }) {
     ...hardwareVariables,
     ...cyberAttackVariables,
     ...courseVariables,
+
+    assetPrice: 0,
+    impactFactor: 0,
+    incidentFrequency: 0,
+    occurrencePeriod: 0, 
+
+    equipmentPrice: 0,
+    oftenEquipmentPrice: 0,
+
+    recoveryTime: 0,
+    workerHourPrice: 0,
   });
 
   const calculateTotal = useCallback(() => {
@@ -160,6 +171,107 @@ function ExpensesForm({ onCalculate }) {
               onFieldChange={handleChange}
             />
           ))}
+
+          <h3 className='form-title'>Расчет стоимости угроз и инцидентов</h3>
+          <div className="form-section">
+            <div className="form-group">
+              <label>Стоимость актива</label>
+              <input
+                type="number"
+                name="assetPrice"
+                value={formData.assetPrice}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Коэффициент воздействия, отражающий процент ущерба актива при реализации угрозы (в диапазоне от 0 до 1)</label>
+              <input
+                type="number"
+                name="impactFactor"
+                value={formData.impactFactor}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Частота возникновения инцидента</label>
+              <input
+                type="number"
+                name="incidentFrequency"
+                value={formData.incidentFrequency}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Укажите срок возникновения инцидента в годах</label>
+              <input
+                type="number"
+                name="occurrencePeriod"
+                value={formData.occurrencePeriod}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+
+          </div>
+
+          <h3 className='form-title'>Расчет стоимости внедрения защитных мер</h3>
+          <div className="form-section">
+            <div className="form-group">
+              <label>Единовременные затраты на покупку оборудование или ПО</label>
+              <input
+                type="number"
+                name="equipmentPrice"
+                value={formData.equipmentPrice}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Постоянные затраты на обслуживание</label>
+              <input
+                type="number"
+                name="oftenEquipmentPrice"
+                value={formData.oftenEquipmentPrice}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+
+          </div>
+
+          <h3 className='form-title'>Расчет стоимости восстановления после инцидента</h3>
+          <div className="form-section">
+            <div className="form-group">
+              <label>Укажите время, затраченное на восстановление в часах</label>
+              <input
+                type="number"
+                name="recoveryTime"
+                value={formData.recoveryTime}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Укажите стоимость человека-часа</label>
+              <input
+                type="number"
+                name="workerHourPrice"
+                value={formData.workerHourPrice}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+
+          </div>
+
         </div>
       )}
     </div>

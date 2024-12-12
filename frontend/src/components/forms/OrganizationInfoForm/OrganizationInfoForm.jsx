@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import Select from 'react-select';
 
-function ExpensesForm({ onCalculate }) {
+function OrganizationInfoForm({ onCalculate }) {
   const [formData, setFormData] = useState({
     organizationName: '',
     industryType: '',
@@ -102,4 +102,4 @@ function ExpensesForm({ onCalculate }) {
   );
 }
 
-export default ExpensesForm;
+export default OrganizationInfoForm;

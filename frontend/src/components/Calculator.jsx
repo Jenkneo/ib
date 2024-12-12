@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import ExpensesForm from './forms/ExpensesForm/ExpensesForm';
 // import HardwareForm from './forms/HardwareForm';
 import OrganizationInfoForm from './forms/OrganizationInfoForm/OrganizationInfoForm';
+import FeasibilityForm from './forms/FeasibilityForm/FeasibilityForm';
 
 function Calculator() {
   const [calculations, setCalculations] = useState({
@@ -50,6 +51,9 @@ function Calculator() {
         onCalculate={(value) => handleCalculationUpdate('personnel', value)}
       />
       <ExpensesForm
+        onCalculate={(value) => handleCalculationUpdate('personnel', value)}
+      />
+      <FeasibilityForm
         onCalculate={(value) => handleCalculationUpdate('personnel', value)}
       />
       {/* <HardwareForm
