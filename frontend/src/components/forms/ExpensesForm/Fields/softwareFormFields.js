@@ -48,3 +48,4 @@ const formFields = fieldsNames.reduce((acc, name) => ({
 }), {});
 
 export default formFields;
+export const softwareFormulas = []

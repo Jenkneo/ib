@@ -29,34 +29,65 @@ function ExpensesForm({ onCalculate }) {
     workerHourPrice: 0,
   });
 
+  const softwareTotal = useCallback(() => {
+    let total = 0;
+    Object.keys(softwareVariables).forEach(key => {
+      if (key.startsWith('has')) {
+        const varName = key.replace('has', '').toLowerCase();
+        if (formData[key]) {
+          total += formData[`${varName}Price`] + formData[`${varName}Period`] * formData[`${varName}WorkerSalary`];
+        }
+      }
+    });
+    return total;
+  }, [formData]);
+
+  const hardwareTotal = useCallback(() => {
+    let total = 0;
+    Object.keys(hardwareVariables).forEach(key => {
+      if (key.startsWith('has')) {
+        const varName = key.replace('has', '').toLowerCase();
+        if (formData[key]) {
+          total += (formData[`${varName}UsageTime`] * 365) + (formData[`${varName}Power`] * formData.electricityCost) + (formData[`${varName}InstallationTime`] * formData[`${varName}WorkerSalary`]);
+        }
+      }
+    });
+    return total;
+  }, [formData]);
+
+  const cyberAttackTotal = useCallback(() => {
+    let total = 0;
+    Object.keys(cyberAttackVariables).forEach(key => {
+      if (key.startsWith('has')) {
+        const varName = key.replace('has', '').replace(/^./, str => str.toLowerCase());
+        if (formData[key]) {
+          total += formData[`${varName}Price`];
+        }
+      }
+    });
+    return total;
+  }, [formData]);
+
+  const studyStaffTotal = useCallback(() => {
+    let total = 0;
+    Object.keys(courseVariables).forEach(key => {
+      if (key.startsWith('has')) {
+        const varName = key.replace('has', '').toLowerCase();
+        if (formData[key]) {
+          total += formData[`${varName}Price`] * formData[`${varName}Amount`];
+        }
+      }
+    });
+    return total;
+  }, [formData]);
+
   const calculateTotal = useCallback(() => {
     if (!isEnabled) return;
-
-    let currentInput = false;
-    let currentPrice = 0;
-    let currentPeriod = 0;
-    let currentWorkerSalary = 0;
     
-    const total = Object.entries(formData).reduce((acc, [key, value]) => {
-      if (key.startsWith('has')) {
-        currentInput = value
-        currentPrice = 0;
-        currentPeriod = 0;
-        currentWorkerSalary = 0;
-      }
-      if (currentInput) {
-        if (key.toLowerCase().includes('price')) currentPrice = value;
-        if (key.toLowerCase().includes('period')) currentPeriod = value;
-        if (key.toLowerCase().includes('workersalary')) currentWorkerSalary = value;
-      }
-      if (key.toLowerCase().includes('workersalary')) {
-        return acc + currentPrice + (currentPeriod * currentWorkerSalary);
-      }
-      return acc
-    }, 0);
+    const total = 0;
     
     onCalculate(total);
-  }, [formData, isEnabled, onCalculate]);
+  }, [formData, isEnabled, onCalculate]); // eslint-disable-line
 
   useEffect(() => {
     if (isEnabled) {
@@ -100,7 +131,7 @@ function ExpensesForm({ onCalculate }) {
           <h3 className='form-title'>Расходы на программное обеспечение для информационной безопасности</h3>
           {softwareSections.map((section, index) => (
             <FormSection
-              key={index} // Уникальный ключ для списка
+              key={index}
               title={section.title}
               checkboxName={section.checkboxName}
               isChecked={formData[section.checkboxName]}
@@ -127,7 +158,7 @@ function ExpensesForm({ onCalculate }) {
 
           {hardwareSections.map((section, index) => (
             <FormSection
-              key={index} // Уникальный ключ для списка
+              key={index}
               title={section.title}
               checkboxName={section.checkboxName}
               isChecked={formData[section.checkboxName]}
@@ -136,6 +167,7 @@ function ExpensesForm({ onCalculate }) {
                 ...field,
                 value: formData[field.name],
               }))}
+              electricityCost={formData.electricityCost}
               onFieldChange={handleChange}
             />
           ))}
@@ -159,7 +191,7 @@ function ExpensesForm({ onCalculate }) {
           <h3 className='form-title'>Потенциальные убытки от кибератак</h3>
           {cyberAttackSections.map((section, index) => (
             <FormSection
-              key={index} // Уникальный ключ для списка
+              key={index}
               title={section.title}
               checkboxName={section.checkboxName}
               isChecked={formData[section.checkboxName]}
@@ -218,6 +250,12 @@ function ExpensesForm({ onCalculate }) {
               />
             </div>
 
+            {formData.occurrencePeriod !== 0 ? (
+              <h3>Общая стоимость: {formData.assetPrice * formData.impactFactor * (formData.incidentFrequency / formData.occurrencePeriod)}</h3>
+            ) : (
+              <h3>Заполните поле "Срок возникновения инцидента"</h3>
+            )}
+
           </div>
 
           <h3 className='form-title'>Расчет стоимости внедрения защитных мер</h3>
@@ -244,6 +282,8 @@ function ExpensesForm({ onCalculate }) {
               />
             </div>
 
+            <h3>Общая стоимость: {formData.equipmentPrice + formData.oftenEquipmentPrice}</h3>
+
           </div>
 
           <h3 className='form-title'>Расчет стоимости восстановления после инцидента</h3>
@@ -269,8 +309,15 @@ function ExpensesForm({ onCalculate }) {
                 min="0"
               />
             </div>
-
+            <h3>Общая стоимость: {(formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()} </h3>
           </div>
+
+            <h1 className='form-title'>Итого, расходы на информационную безопасность составляют: {
+            softwareTotal() + hardwareTotal() + studyStaffTotal() + cyberAttackTotal() + 
+            (formData.assetPrice * formData.impactFactor * (formData.incidentFrequency / (formData.occurrencePeriod > 0 ? formData.occurrencePeriod : 1))) +
+            (formData.equipmentPrice + formData.oftenEquipmentPrice) + 
+            ((formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal())
+            }</h1>
 
         </div>
       )}

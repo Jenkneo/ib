@@ -12,7 +12,7 @@ const baseFields = [
     min: 0,
   },
   {
-    label: 'Срок полезного использования (в годах):',
+    label: 'Срок полезного использования (час/день):',
     type: 'number',
     name: 'usageTime',
     min: 0,

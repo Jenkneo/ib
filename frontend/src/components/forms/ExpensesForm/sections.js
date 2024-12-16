@@ -257,7 +257,7 @@ export const hardwareSections = [
 ]
 
 export const hardwareVariables = {
-  hasComputer: false,
+    hasComputer: false,
     computerPrice: 0,
     computerLiquidationPrice: 0,
     computerUsageTime: 0,
