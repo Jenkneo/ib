@@ -8,8 +8,9 @@ import {
 } from './sections';
 
 
-function ExpensesForm({ onCalculate }) {
+function ExpensesForm({ onCalculate, onDataChange }) {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [localData, setLocalData] = useState("Исходные данные из ChildOne");
   const [formData, setFormData] = useState({
     ...softwareVariables,
     electricityCost: 0,
@@ -20,7 +21,7 @@ function ExpensesForm({ onCalculate }) {
     assetPrice: 0,
     impactFactor: 0,
     incidentFrequency: 0,
-    occurrencePeriod: 0, 
+    occurrencePeriod: 1, 
 
     equipmentPrice: 0,
     oftenEquipmentPrice: 0,
@@ -29,11 +30,18 @@ function ExpensesForm({ onCalculate }) {
     workerHourPrice: 0,
   });
 
+  // Автоматически передаем данные в родителя при их изменении
+  useEffect(() => {
+    onDataChange(localData); // Вызываем родительскую функцию
+  }, [localData, onDataChange]);
+
+  // Симулируем изменение данных (например, на основе времени)
+  
   const softwareTotal = useCallback(() => {
     let total = 0;
     Object.keys(softwareVariables).forEach(key => {
       if (key.startsWith('has')) {
-        const varName = key.replace('has', '').toLowerCase();
+        const varName = key.replace('has', '').replace(/^./, str => str.toLowerCase());
         if (formData[key]) {
           total += formData[`${varName}Price`] + formData[`${varName}Period`] * formData[`${varName}WorkerSalary`];
         }
@@ -46,7 +54,7 @@ function ExpensesForm({ onCalculate }) {
     let total = 0;
     Object.keys(hardwareVariables).forEach(key => {
       if (key.startsWith('has')) {
-        const varName = key.replace('has', '').toLowerCase();
+        const varName = key.replace('has', '').replace(/^./, str => str.toLowerCase());
         if (formData[key]) {
           total += (formData[`${varName}UsageTime`] * 365) + (formData[`${varName}Power`] * formData.electricityCost) + (formData[`${varName}InstallationTime`] * formData[`${varName}WorkerSalary`]);
         }
@@ -80,6 +88,25 @@ function ExpensesForm({ onCalculate }) {
     });
     return total;
   }, [formData]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLocalData(
+        {
+          softwareTotal: softwareTotal(),
+          hardwareTotal: hardwareTotal(),
+          cyberAttackTotal: cyberAttackTotal(),
+          courseTotal: studyStaffTotal(),
+          incidentCost: (formData.assetPrice * formData.impactFactor * (formData.incidentFrequency / (formData.occurrencePeriod > 0 ? formData.occurrencePeriod : 1))),
+          safetyMeasuresCost: (formData.equipmentPrice + formData.oftenEquipmentPrice),
+          recoveryCost: ((formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()),
+        }
+      );
+    }, 1000); // Обновляем данные каждую секунду
+
+    return () => clearTimeout(timer);
+  }, [cyberAttackTotal, formData.assetPrice, formData.equipmentPrice, formData.impactFactor, formData.incidentFrequency, formData.occurrencePeriod, formData.oftenEquipmentPrice, formData.recoveryTime, formData.workerHourPrice, hardwareTotal, softwareTotal, studyStaffTotal]);
+
 
   const calculateTotal = useCallback(() => {
     if (!isEnabled) return;

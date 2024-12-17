@@ -11,6 +11,7 @@ function Calculator() {
     software: 0,
     personnel: 0,
   });
+  const [data, setData] = useState("");
 
   const handleCalculationUpdate = useCallback((type, value) => {
     setCalculations((prev) => {
@@ -52,9 +53,11 @@ function Calculator() {
       />
       <ExpensesForm
         onCalculate={(value) => handleCalculationUpdate('personnel', value)}
+        onDataChange={setData}
       />
       <FeasibilityForm
         onCalculate={(value) => handleCalculationUpdate('personnel', value)}
+        receivedData={data}
       />
       {/* <HardwareForm
         onCalculate={(value) => handleCalculationUpdate('hardware', value)}

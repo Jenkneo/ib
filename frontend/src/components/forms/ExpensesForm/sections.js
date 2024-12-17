@@ -51,22 +51,22 @@ export const softwareSections = [
   },
   {
     title: 'Средства мониторинга и анализа безопасности (SIEM)',
-    checkboxName: 'hasSIEM',
+    checkboxName: 'hasSiem',
     fields: softwareFormFields.siemFields,
   },
   {
     title: 'Платформы для управления инцидентами безопасности (SOAR)',
-    checkboxName: 'hasSOAR',
+    checkboxName: 'hasSoar',
     fields: softwareFormFields.soarFields,
   },
   {
     title: 'Инструменты для защиты веб-приложений (WAF)',
-    checkboxName: 'hasWAF',
+    checkboxName: 'hasWaf',
     fields: softwareFormFields.wafFields,
   },
   {
     title: 'Системы обнаружения и предотвращения утечек данных (DLP)',
-    checkboxName: 'hasDLP',
+    checkboxName: 'hasDlp',
     fields: softwareFormFields.dlpFields,
   },
   {
@@ -137,22 +137,22 @@ export const softwareVariables = {
   antiExploitSoftwarePeriod: 0,
   antiExploitSoftwareWorkerSalary: 0,
 
-  hasSIEM: false,
+  hasSiem: false,
   siemPrice: 0,
   siemPeriod: 0,
   siemWorkerSalary: 0,
 
-  hasSOAR: false,
+  hasSoar: false,
   soarPrice: 0,
   soarPeriod: 0,
   soarWorkerSalary: 0,
 
-  hasWAF: false,
+  hasWaf: false,
   wafPrice: 0,
   wafPeriod: 0,
   wafWorkerSalary: 0,
 
-  hasDLP: false,
+  hasDlp: false,
   dlpPrice: 0,
   dlpPeriod: 0,
   dlpWorkerSalary: 0,
