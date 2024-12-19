@@ -4,6 +4,8 @@ import taskTypeCoefficientTable from './taskTypeCoefficientTable';
 
 function FeasibilityForm({ onCalculate, receivedData }) {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [feasibilityData, setfeasibilityData] = useState();
+  
   const [formData, setFormData] = useState({
     feasibilityRatio: 0,
     levelTypes: 'low',
@@ -115,7 +117,7 @@ function FeasibilityForm({ onCalculate, receivedData }) {
     return (formData.monthlySalary * formData.totalDevelopmentTime) * (formData.workingDaysInMonth * formData.workingHoursInDay)
   }
 
-  const systemCalculations = () => {
+  const systemCalculations = useCallback(() => {
     if (formData.feasibilityRatio < 1400 || formData.feasibilityRatio > 5500 ||
         formData.qualificationCoefficient < 0.8 || formData.qualificationCoefficient > 1.5 || 
         formData.changeConsiderationCoefficient < 1.2 || formData.changeConsiderationCoefficient > 1.5 || 
@@ -140,7 +142,7 @@ function FeasibilityForm({ onCalculate, receivedData }) {
       documentationTime,
       total,
     };
-  }
+  })
 
   const insuranceContributionsCalculations = () => {
     let pensionFund = 0;
@@ -214,6 +216,27 @@ function FeasibilityForm({ onCalculate, receivedData }) {
     }
   }, [isEnabled, calculateTotal, onCalculate]);
 
+
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    if (!systemCalculations()) return null;
+    setfeasibilityData(
+      {
+        taskDescriptionTime: systemCalculations().taskDescriptionTime, 
+        algorithmDevelopmentTime: systemCalculations().algorithmDevelopmentTime, 
+        flowchartDevelopmentTime: systemCalculations().flowchartDevelopmentTime, 
+        programmingTime: systemCalculations().programmingTime, 
+        programTypingTime: systemCalculations().programTypingTime,
+        debuggingTestingTime: systemCalculations().debuggingTestingTime, 
+        documentationTime: systemCalculations().documentationTime,
+      }
+    );
+  }, 1000); // Обновляем данные каждую секунду
+
+    return () => clearTimeout(timer);
+  }, [systemCalculations]);
+  
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -228,6 +251,21 @@ function FeasibilityForm({ onCalculate, receivedData }) {
       [name]: selectedOption.value
     }));
   };
+
+  const checkEmptyForms = useCallback(() => {
+    const emptyForms = [];
+    if (!systemCalculations()) return null;
+
+    if (!systemCalculations().taskDescriptionTime) emptyForms.push('Основные параметры');
+    if (!systemCalculations().algorithmDevelopmentTime) emptyForms.push('Расчет заработной платы исполнителя работ по созданию программного продукта');
+    if (!systemCalculations().flowchartDevelopmentTime) emptyForms.push('Расчет величин обязательных страховых взносов');
+    if (!systemCalculations().programmingTime) emptyForms.push('Расчет расходов на содержание и эксплуатацию ПЭВМ');
+    if (!systemCalculations().programTypingTime) emptyForms.push('Расчет себестоимости программного продукта');
+    if (!systemCalculations().debuggingTestingTime) emptyForms.push('Расчет окупаемости');
+    if (!systemCalculations().documentationTime) emptyForms.push('Расчет выгод для системы информационной безопастности (СИБ)');
+
+    return emptyForms;
+  }, [systemCalculations]);
 
   return (
     <div className="form-container">
@@ -584,7 +622,7 @@ function FeasibilityForm({ onCalculate, receivedData }) {
             </div>
 
             {calculationOfPaybackPeriod() ? (
-              <h3>Окупаемость программного продукта: {calculationOfPaybackPeriod()}</h3>
+              <h3>Окупаемость программного продукта: {calculationOfPaybackPeriod()}</h3> 
             ) : (
               <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
             )}
