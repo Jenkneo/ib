@@ -10,7 +10,7 @@ import {
 
 function ExpensesForm({ onCalculate, onDataChange }) {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [localData, setLocalData] = useState("Исходные данные из ChildOne");
+  const [localData, setLocalData] = useState();
   const [formData, setFormData] = useState({
     ...softwareVariables,
     electricityCost: 0,
@@ -88,6 +88,20 @@ function ExpensesForm({ onCalculate, onDataChange }) {
     });
     return total;
   }, [formData]);
+
+  const checkEmptyForms = useCallback(() => {
+    const emptyForms = [];
+
+    if (!localData.softwareTotal) emptyForms.push('Расходы на программное обеспечение для информационной безопасности');
+    if (!localData.hardwareTotal) emptyForms.push('Расходы на офисное ЭВО');
+    if (!localData.cyberAttackTotal) emptyForms.push('Расходы на обучение специалистов по информационной безопасности');
+    if (!localData.courseTotal) emptyForms.push('Потенциальные убытки от кибератак');
+    if (!localData.incidentCost) emptyForms.push('Расчет стоимости угроз и инцидентов');
+    if (!localData.safetyMeasuresCost) emptyForms.push('Расчет стоимости внедрения защитных мер');
+    if (!localData.recoveryCost) emptyForms.push('Расчет стоимости восстановления после инцидента');
+
+    return emptyForms;
+  }, [localData]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -170,6 +184,7 @@ function ExpensesForm({ onCalculate, onDataChange }) {
               onFieldChange={handleChange}
             />
           ))}
+          <span className='total-calculations'>Общая стоимость расходов на программное обеспечение составляет: {softwareTotal()}</span>
 
           <h3 className='form-title'>Расходы на офисное ЭВО</h3>
           <div className="form-group">
@@ -182,7 +197,6 @@ function ExpensesForm({ onCalculate, onDataChange }) {
               min="0"
             />
           </div>
-
           {hardwareSections.map((section, index) => (
             <FormSection
               key={index}
@@ -198,6 +212,8 @@ function ExpensesForm({ onCalculate, onDataChange }) {
               onFieldChange={handleChange}
             />
           ))}
+          <span className='total-calculations'>Общая стоимость расходов на офисное ЭВО составляет: {hardwareTotal()}</span>
+
 
           <h3 className='form-title'>Расходы на обучение специалистов по информационной безопасности</h3>
           {courseSections.map((section, index) => (
@@ -214,6 +230,8 @@ function ExpensesForm({ onCalculate, onDataChange }) {
               onFieldChange={handleChange}
             />
           ))}
+          <span className='total-calculations'>Общая стоимость расходов на обучение специалистов по информационной безопасности составляет: {studyStaffTotal()}</span>
+
 
           <h3 className='form-title'>Потенциальные убытки от кибератак</h3>
           {cyberAttackSections.map((section, index) => (
@@ -230,6 +248,8 @@ function ExpensesForm({ onCalculate, onDataChange }) {
               onFieldChange={handleChange}
             />
           ))}
+          <span className='total-calculations'>Общая стоимость расходов на потенциальные убытки от кибератак составляет: {cyberAttackTotal()}</span>
+
 
           <h3 className='form-title'>Расчет стоимости угроз и инцидентов</h3>
           <div className="form-section">
@@ -284,6 +304,8 @@ function ExpensesForm({ onCalculate, onDataChange }) {
             )}
 
           </div>
+          <span className='total-calculations'></span>
+
 
           <h3 className='form-title'>Расчет стоимости внедрения защитных мер</h3>
           <div className="form-section">
@@ -312,6 +334,8 @@ function ExpensesForm({ onCalculate, onDataChange }) {
             <h3>Общая стоимость: {formData.equipmentPrice + formData.oftenEquipmentPrice}</h3>
 
           </div>
+          <span className='total-calculations'></span>
+
 
           <h3 className='form-title'>Расчет стоимости восстановления после инцидента</h3>
           <div className="form-section">
@@ -338,6 +362,8 @@ function ExpensesForm({ onCalculate, onDataChange }) {
             </div>
             <h3>Общая стоимость: {(formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()} </h3>
           </div>
+          <span className='total-calculations'></span>
+
 
             <h1 className='form-title'>Итого, расходы на информационную безопасность составляют: {
             softwareTotal() + hardwareTotal() + studyStaffTotal() + cyberAttackTotal() + 
@@ -345,6 +371,17 @@ function ExpensesForm({ onCalculate, onDataChange }) {
             (formData.equipmentPrice + formData.oftenEquipmentPrice) + 
             ((formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal())
             }</h1>
+            <span>
+              {checkEmptyForms().length ? (
+                <div>
+                  <span>Примечание: вы не заполнили следующие поля:</span>
+                  <ul className='list'>
+                    {checkEmptyForms().map(item => <li key={item}>{item}</li>)}
+                  </ul>
+                </div>
+              ) : ('')
+              }
+            </span>
 
         </div>
       )}

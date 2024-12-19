@@ -9,16 +9,6 @@ const FormSection = ({
   onFieldChange,
   electricityCost = null,
 }) => {
-  const defaultSummaryName =  fields.length === 3 || fields.length === 1 ? 'Общая стоимость' : 
-                              fields.length === 6 ? 'Электричество' : 'Стоимость обучения';
-  
-  const defaultSummary =  fields.length === 3 ? fields[0].value + (fields[1].value * fields[2].value) :
-                          fields.length === 6 ? (fields[2].value * 365) + (fields[5].value * electricityCost) : 
-                          fields.length === 2 ? fields[0].value * fields[1].value :
-                          fields[0].value
-
-  const hardwareSummaryName = 'Стоимость установки и настройки'
-
   return (
     <div className="form-section">
       <div className="checkbox-group">
@@ -47,16 +37,6 @@ const FormSection = ({
               />
             </div>
           ))}
-          <div>
-            {defaultSummaryName}: {defaultSummary}
-          {fields.length === 6 && (
-            <div>
-              <span>{hardwareSummaryName}: {fields[3].value * fields[4].value}</span>
-              <h4>Общая стоимость:  {defaultSummary + (fields[3].value * fields[4].value)}</h4>
-            </div>
-          )}
-            
-          </div>
         </div>
       )}
     </div>
