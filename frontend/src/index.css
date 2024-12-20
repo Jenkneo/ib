@@ -238,13 +238,22 @@ button:disabled {
 }
 
 .download-btn {
-  background-color: #28a745;
   width: auto;
   display: inline-block;
 }
 
-.download-btn:hover {
+.btn-enabled{
+  background-color: #28a745;
+}
+
+.btn-enabled:hover{
   background-color: #218838;
+}
+
+.btn-disabled{
+  background-color: #b3b3b3;
+  width: auto;
+  display: inline-block;
 }
 
 /* Auth Styles */
