@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Select from 'react-select';
 
-function OrganizationInfoForm({ onCalculate }) {
+function OrganizationInfoForm({ onCalculate, onDataChange }) {
   const [formData, setFormData] = useState({
     organizationName: '',
     industryType: '',
@@ -9,6 +9,11 @@ function OrganizationInfoForm({ onCalculate }) {
     securityBudget: 0,
     organizationSize: 'small'
   });
+
+  // Автоматически передаем данные в родителя при их изменении
+  useEffect(() => {
+    onDataChange(formData); // Вызываем родительскую функцию
+  }, [formData, onDataChange]);
 
   const organizationSizes = [
     { value: 'small', label: 'Маленький' },

@@ -8,7 +8,7 @@ import {
 } from './sections';
 
 
-function ExpensesForm({ onCalculate, onDataChange }) {
+function ExpensesForm({ onDataChange }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [localData, setLocalData] = useState();
   const [formData, setFormData] = useState({
@@ -121,22 +121,6 @@ function ExpensesForm({ onCalculate, onDataChange }) {
     return () => clearTimeout(timer);
   }, [cyberAttackTotal, formData.assetPrice, formData.equipmentPrice, formData.impactFactor, formData.incidentFrequency, formData.occurrencePeriod, formData.oftenEquipmentPrice, formData.recoveryTime, formData.workerHourPrice, hardwareTotal, softwareTotal, studyStaffTotal]);
 
-
-  const calculateTotal = useCallback(() => {
-    if (!isEnabled) return;
-    
-    const total = 0;
-    
-    onCalculate(total);
-  }, [formData, isEnabled, onCalculate]); // eslint-disable-line
-
-  useEffect(() => {
-    if (isEnabled) {
-      calculateTotal();
-    } else {
-      onCalculate(0);
-    }
-  }, [isEnabled, calculateTotal, onCalculate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

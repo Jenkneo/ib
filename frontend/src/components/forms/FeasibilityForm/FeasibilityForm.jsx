@@ -2,16 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Select from 'react-select';
 import taskTypeCoefficientTable from './taskTypeCoefficientTable';
 
-function FeasibilityForm({ onCalculate, receivedData }) {
-  const [isEnabled, setIsEnabled] = useState(false);
+function FeasibilityForm({ receivedData, onDataChange }) {
+  const [isEnabled, setIsEnabled] = useState(false);  
+  const [localData, setLocalData] = useState();
   const [formData, setFormData] = useState({
     feasibilityRatio: 0,
     levelTypes: 'low',
     groupDifficulty: 'first',
     noveltyDegree: 'groupA',
-    changeConsiderationCoefficient: 0,
+    changeConsiderationCoefficient: 1.2,
     qualificationCoefficient: 0.8,
-
     documentationTime: 0,
 
     monthlySalary: 0,
@@ -39,6 +39,12 @@ function FeasibilityForm({ onCalculate, receivedData }) {
 
     taskTypeCoefficient: 0,
   });
+
+  // Автоматически передаем данные в родителя при их изменении
+  useEffect(() => {
+    onDataChange(localData); // Вызываем родительскую функцию
+  }, [localData, onDataChange]);
+  
 
   const levelTypes = [
     { value: 'high', label: 'Высокий уровень' },
@@ -101,35 +107,35 @@ function FeasibilityForm({ onCalculate, receivedData }) {
     { value: '8.5', label: '32 класс' },
   ];
 
-  // eslint-disable-next-line
   const taskTypeCoefCalc = useCallback(() => {
     formData.taskTypeCoefficient = taskTypeCoefficientTable[formData.levelTypes][formData.groupDifficulty][formData.noveltyDegree]; // 
 
     return formData.taskTypeCoefficient;
   }, [formData]);
 
-  const workerSalaryCalculations = () => {
+  const workerSalaryCalculations = useCallback(() => {
     if (!((formData.workingDaysInMonth >= 1 && formData.workingDaysInMonth <= 31) && (formData.workingHoursInDay >= 1 && formData.workingHoursInDay <= 12))) {
       return null;
     }
     return (formData.monthlySalary * formData.totalDevelopmentTime) * (formData.workingDaysInMonth * formData.workingHoursInDay)
-  }
+  }, [formData.workingDaysInMonth, formData.workingHoursInDay, formData.monthlySalary, formData.totalDevelopmentTime]);
 
-  const systemCalculations = () => {
+  const systemCalculations = useCallback(() => {
+    const Q = formData.feasibilityRatio * taskTypeCoefCalc();
     if (formData.feasibilityRatio < 1400 || formData.feasibilityRatio > 5500 ||
         formData.qualificationCoefficient < 0.8 || formData.qualificationCoefficient > 1.5 || 
         formData.changeConsiderationCoefficient < 1.2 || formData.changeConsiderationCoefficient > 1.5 || 
         formData.documentationTime < 3 || formData.documentationTime > 8) {
       return null;
     }
-    const taskDescriptionTime = (formData.feasibilityRatio * formData.changeConsiderationCoefficient) / (50 * formData.qualificationCoefficient);
-    const algorithmDevelopmentTime = formData.feasibilityRatio / (50 * formData.qualificationCoefficient);
-    const flowchartDevelopmentTime = formData.feasibilityRatio / (50 * formData.qualificationCoefficient);
-    const programmingTime = (formData.feasibilityRatio * 1.5) / (50 * formData.qualificationCoefficient);
-    const programTypingTime = formData.feasibilityRatio / 50;
-    const debuggingTestingTime = (formData.feasibilityRatio * 4) / (50 * formData.qualificationCoefficient);
-    const documentationTime = formData.documentationTime * 8;
-    const total = taskDescriptionTime + algorithmDevelopmentTime + flowchartDevelopmentTime + programmingTime + programTypingTime + debuggingTestingTime + documentationTime;
+    const taskDescriptionTime = parseFloat(((Q * formData.changeConsiderationCoefficient) / (50 * formData.qualificationCoefficient)).toFixed(2));
+    const algorithmDevelopmentTime = parseFloat((Q / (50 * formData.qualificationCoefficient)).toFixed(2));
+    const flowchartDevelopmentTime = parseFloat((Q / (50 * formData.qualificationCoefficient)).toFixed(2));
+    const programmingTime = parseFloat(((Q * 1.5) / (50 * formData.qualificationCoefficient)).toFixed(2));
+    const programTypingTime = parseFloat((Q / 50).toFixed(2));
+    const debuggingTestingTime = parseFloat(((Q * 4) / (50 * formData.qualificationCoefficient)).toFixed(2));
+    const documentationTime = parseFloat((formData.documentationTime * 8).toFixed(2));
+    const total = parseFloat((taskDescriptionTime + algorithmDevelopmentTime + flowchartDevelopmentTime + programmingTime + programTypingTime + debuggingTestingTime + documentationTime).toFixed(2));
     return {
       taskDescriptionTime,
       algorithmDevelopmentTime,
@@ -140,9 +146,9 @@ function FeasibilityForm({ onCalculate, receivedData }) {
       documentationTime,
       total,
     };
-  }
+  }, [formData.changeConsiderationCoefficient, formData.documentationTime, formData.feasibilityRatio, formData.qualificationCoefficient, taskTypeCoefCalc]);
 
-  const insuranceContributionsCalculations = () => {
+  const insuranceContributionsCalculations = useCallback(() => {
     let pensionFund = 0;
     let medicalInsuranceFund = 0;
     let socialInsuranceFund = 0;
@@ -171,9 +177,9 @@ function FeasibilityForm({ onCalculate, receivedData }) {
       injuryContributions,
       totalContributions
     };
-  }
+  }, [formData.businessType, formData.employeeSalary, formData.professionalRiskClass]);
 
-  const calculationOfExpensesForComputerMaintenance = () => {
+  const calculationOfExpensesForComputerMaintenance = useCallback(() => {
     if (formData.usefulLifeSpan <= 0) return null;
     let annualAmortization = parseFloat((100 / formData.usefulLifeSpan).toFixed(2));
     let amortizationExpenses = parseFloat((formData.totalPCPeripheralPower * annualAmortization).toFixed(2));
@@ -189,30 +195,33 @@ function FeasibilityForm({ onCalculate, receivedData }) {
       totalAnnualExpenses,
       costPerMachineHour
     }
-  }
+  }, [formData.annualEffectiveOperatingTime, formData.costPerKw, formData.totalLightingPower, formData.totalPCPeripheralPower, formData.usefulLifeSpan]);
 
-  const calculationOfPaybackPeriod = () => {
+  const softwareCostCalculations = useCallback(() => {
+    if (!(workerSalaryCalculations() && insuranceContributionsCalculations() && calculationOfExpensesForComputerMaintenance())) return null;
+    let softwareCost = workerSalaryCalculations() + insuranceContributionsCalculations().totalContributions + calculationOfExpensesForComputerMaintenance().totalAnnualExpenses;
+    return parseFloat(softwareCost.toFixed(2));
+  }, [calculationOfExpensesForComputerMaintenance, insuranceContributionsCalculations, workerSalaryCalculations]);
+
+  const calculationOfPaybackPeriod = useCallback(() => {
     if (formData.savingsOnAutomation + formData.annualSavings + formData.additionalExpenses <= 0) return null;
     let softwareCost = workerSalaryCalculations() + insuranceContributionsCalculations().totalContributions + calculationOfExpensesForComputerMaintenance().totalAnnualExpenses;
     
     return parseFloat((softwareCost / (formData.savingsOnAutomation + formData.annualSavings + formData.additionalExpenses)).toFixed(2));
-  }
+  }, [formData.additionalExpenses, formData.annualSavings, formData.savingsOnAutomation, calculationOfExpensesForComputerMaintenance, insuranceContributionsCalculations, workerSalaryCalculations]);
 
-  const calculateTotal = useCallback(() => {
-    if (!isEnabled) return;
-
-    let total = 0
-
-    onCalculate(total);
-  }, [formData, isEnabled, onCalculate]); // eslint-disable-line
-
-  useEffect(() => {
-    if (isEnabled) {
-      calculateTotal();
-    } else {
-      onCalculate(0);
+  const calculationFeasibilityTotal = useCallback(() => {
+    const threatPreventionBenefit = parseFloat(((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)).toFixed(2));
+    const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
+    const paybackPeriod = parseFloat((informationSecurityExpenses / threatPreventionBenefit).toFixed(2));
+    const lossPreventionCoefficient = parseFloat((threatPreventionBenefit).toFixed(2));
+    return {
+      threatPreventionBenefit,
+      informationSecurityExpenses,
+      paybackPeriod: isNaN(paybackPeriod) ? 0 : paybackPeriod,
+      lossPreventionCoefficient
     }
-  }, [isEnabled, calculateTotal, onCalculate]);
+  }, [receivedData, formData.threatProbability, formData.remainingRisk]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -228,6 +237,25 @@ function FeasibilityForm({ onCalculate, receivedData }) {
       [name]: selectedOption.value
     }));
   };
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLocalData(
+          {
+            systemCalculations: systemCalculations(),
+            workerSalaryCalculations: workerSalaryCalculations(),
+            insuranceContributionsCalculations: insuranceContributionsCalculations(),
+            calculationOfExpensesForComputerMaintenance: calculationOfExpensesForComputerMaintenance(),
+            softwareCost: softwareCostCalculations(),
+            calculationOfPaybackPeriod: calculationOfPaybackPeriod(),
+            calculationFeasibilityTotal: calculationFeasibilityTotal(),
+          }
+        );
+      }, 1000); // Обновляем данные каждую секунду
+  
+      return () => clearTimeout(timer);
+    }, [systemCalculations, workerSalaryCalculations, insuranceContributionsCalculations, calculationOfExpensesForComputerMaintenance, softwareCostCalculations, calculationOfPaybackPeriod, calculationFeasibilityTotal]);
+  
 
   return (
     <div className="form-container">
@@ -380,7 +408,7 @@ function FeasibilityForm({ onCalculate, receivedData }) {
               />
             </div>
             <div className="form-group">
-              <label>Укажите число рабочих дней в месяц:</label>
+              <label>Укажите число рабочих дней в месяц (от 1 до 31):</label>
               <input
                 type="number"
                 name="workingDaysInMonth"
@@ -390,7 +418,7 @@ function FeasibilityForm({ onCalculate, receivedData }) {
               />
             </div>
             <div className="form-group">
-              <label>Укажите продолжительность рабочего дня в часах:</label>
+              <label>Укажите продолжительность рабочего дня в часах (от 1 до 12):</label>
               <input
                 type="number"
                 name="workingHoursInDay"
@@ -540,7 +568,7 @@ function FeasibilityForm({ onCalculate, receivedData }) {
             <div className="form-group">
               {workerSalaryCalculations() && insuranceContributionsCalculations() && calculationOfExpensesForComputerMaintenance() ? (
                 <h3>Себестоимость программного продукта составляет: {
-                  workerSalaryCalculations() + insuranceContributionsCalculations().totalContributions + calculationOfExpensesForComputerMaintenance().totalAnnualExpenses
+                  softwareCostCalculations()
                   }
                 </h3>
               ) : (
@@ -616,8 +644,11 @@ function FeasibilityForm({ onCalculate, receivedData }) {
 
             {receivedData ? (
               <div>
-                <h3>Выгода от предотвращения угроз: {(Math.round((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)) * 100) / 100}</h3>
-                <h3>Экономическая эффективность: {Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2)}</h3>
+                <h3>Выгода от предотвращения угроз: {calculationFeasibilityTotal().threatPreventionBenefit}</h3>
+                {/* <h3>Экономическая эффективность: {Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2)}</h3> */}
+                <h3>Расходы на инормационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3>
+                <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
+                <h3>Коэффициент предотвращения убытков: {calculationFeasibilityTotal().lossPreventionCoefficient}</h3>
               </div>
             ) : (
               <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
