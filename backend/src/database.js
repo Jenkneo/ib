@@ -10,6 +10,7 @@ export function initializeDatabase() {
       lastName TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
+      isAdmin BOOLEAN DEFAULT 0,
       organizationName TEXT,
       industryType TEXT,
       annualBudget REAL,
@@ -21,10 +22,10 @@ export function initializeDatabase() {
 
 export function createUser(userData) {
   const stmt = db.prepare(`
-    INSERT INTO users (firstName, lastName, email, password)
-    VALUES (@firstName, @lastName, @email, @password)
+    INSERT INTO users (firstName, lastName, email, password, isAdmin)
+    VALUES (@firstName, @lastName, @email, @password, @isAdmin)
   `);
-  return stmt.run(userData);
+  return stmt.run({ ...userData, isAdmin: userData.isAdmin || 0 });
 }
 
 export function findUserByEmail(email) {
@@ -48,4 +49,27 @@ export function updateUserProfile(userId, profileData) {
 export function getUserProfile(userId) {
   const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
   return stmt.get(userId);
+}
+
+export function getTotalUsers() {
+  const stmt = db.prepare('SELECT COUNT(*) as total FROM users');
+  return stmt.get();
+}
+
+export function getAllUsers() {
+  const stmt = db.prepare(`
+    SELECT 
+      id,
+      firstName,
+      lastName,
+      email,
+      isAdmin,
+      organizationName,
+      industryType,
+      annualBudget,
+      securityBudget,
+      organizationSize
+    FROM users
+  `);
+  return stmt.all();
 }

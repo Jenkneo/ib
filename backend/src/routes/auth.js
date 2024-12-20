@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 // Registration endpoint
 router.post('/register', async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, isAdmin } = req.body;
 
     // Check if user already exists
     const existingUser = findUserByEmail(email);
@@ -25,6 +25,7 @@ router.post('/register', async (req, res) => {
       firstName,
       lastName,
       email,
+      isAdmin,
       password: hashedPassword
     });
 

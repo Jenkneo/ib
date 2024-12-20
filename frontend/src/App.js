@@ -4,9 +4,11 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Calculator from './components/Calculator';
 import Profile from './components/Profile';
+import AdminPage from './pages/AdminPage';
 import Header from './components/Header';
 import { getProfile } from './services/api';
 import './index.css';
+import './styles/admin.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,7 +68,7 @@ function App() {
 
   return (
     <Router>
-      {isAuthenticated && <Header onLogout={handleLogout} />}
+      {isAuthenticated && <Header onLogout={handleLogout} user={currentUser}/>}
       <div className="container">
         <Routes>
           <Route 
@@ -94,6 +96,16 @@ function App() {
             element={
               isAuthenticated ? (
                 <Profile user={currentUser} onUpdateProfile={updateUserProfile} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              isAuthenticated ? (
+                <AdminPage user={currentUser} />
               ) : (
                 <Navigate to="/login" replace />
               )

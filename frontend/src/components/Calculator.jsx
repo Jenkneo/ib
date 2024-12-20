@@ -73,8 +73,6 @@ function Calculator() {
     saveAs(blob, 'security-calculations.md');
   };
 
-console.log(feasibilityData)
-
   return (
     <div>
       <h2 className="form-title">Экономика защиты информации</h2>

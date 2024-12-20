@@ -211,6 +211,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
   }, [formData.additionalExpenses, formData.annualSavings, formData.savingsOnAutomation, calculationOfExpensesForComputerMaintenance, insuranceContributionsCalculations, workerSalaryCalculations]);
 
   const calculationFeasibilityTotal = useCallback(() => {
+    if (!receivedData) return null;
     const threatPreventionBenefit = parseFloat(((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)).toFixed(2));
     const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
     const paybackPeriod = parseFloat((informationSecurityExpenses / threatPreventionBenefit).toFixed(2));

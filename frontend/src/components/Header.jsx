@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Header({ onLogout }) {
+function Header({ onLogout, user }) {
   return (
     <header className="header">
       <div className="container">
@@ -10,6 +10,9 @@ function Header({ onLogout }) {
           <div className="nav-links">
             <Link to="/" className="nav-link">Калькулятор</Link>
             <Link to="/profile" className="nav-link">Личный кабинет</Link>
+            {user?.isAdmin && (
+              <Link to="/admin" className="nav-link">Администрирование</Link>
+            )}
             <button className="logout-btn" onClick={onLogout}>Выйти</button>
           </div>
         </nav>
