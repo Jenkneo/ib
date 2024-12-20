@@ -18,7 +18,7 @@ export async function setupDefaultAdmin() {
         lastName: adminLastName,
         email: adminEmail,
         password: hashedPassword,
-        isAdmin: true
+        isAdmin: 1
       });
       
       console.log('Default admin user created successfully');
