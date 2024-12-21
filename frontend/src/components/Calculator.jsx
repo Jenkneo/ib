@@ -9,6 +9,24 @@ function Calculator() {
   const [organizationData, setOrganizationData] = useState();
   const [feasibilityData, setFeasibilityData] = useState();
 
+  const isValidData = (data) => {
+    if (typeof data === 'number') {
+      return !isNaN(data) && isFinite(data);
+    }
+
+    if (typeof data === 'object' && data !== null) {
+      for (const key in data) {
+        if (!isValidData(data[key])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
   const downloadCalculations = () => {
     const content = `
 ## Информация об организации
@@ -98,9 +116,15 @@ function Calculator() {
             руб.
           </strong> */}
         </div>
-        <button className="download-btn" onClick={downloadCalculations}>
-          Скачать расчеты
-        </button>
+        {isValidData(expensesData) && isValidData(feasibilityData) ? (
+          <button className="download-btn" onClick={downloadCalculations}>
+            Скачать расчеты
+          </button>
+        ) : (
+          <button className="download-btn disabled" disabled>
+            Скачать расчеты
+          </button>
+        )}
       </div>
     </div>
   );
