@@ -11,7 +11,7 @@ function Calculator() {
 
   const isValidData = (data) => {
     if (typeof data === 'number') {
-      return !isNaN(data) && isFinite(data);
+      return !isNaN(data);
     }
 
     if (typeof data === 'object' && data !== null) {
@@ -82,7 +82,7 @@ function Calculator() {
 ### Расчет выгод для системы информационной безопастности (СИБ): 
 - Выгода от предотвращения угроз: ${feasibilityData.calculationFeasibilityTotal.threatPreventionBenefit}
 - Расходы на инормационную безопасность составляют: ${feasibilityData.calculationFeasibilityTotal.informationSecurityExpenses}
-- Срок окупаемости: ${feasibilityData.calculationFeasibilityTotal.paybackPeriod}
+- Срок окупаемости: ${isFinite(feasibilityData.calculationFeasibilityTotal.paybackPeriod) ? feasibilityData.calculationFeasibilityTotal.paybackPeriod : 'никогда'}
 - Коэффициент предотвращения убытков: ${feasibilityData.calculationFeasibilityTotal.lossPreventionCoefficient}
 
 Дата расчета: ${new Date().toLocaleDateString()}
