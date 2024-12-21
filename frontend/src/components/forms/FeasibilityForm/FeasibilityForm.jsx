@@ -205,7 +205,8 @@ function FeasibilityForm({ receivedData, onDataChange }) {
 
   const calculationOfPaybackPeriod = useCallback(() => {
     if (formData.savingsOnAutomation + formData.annualSavings + formData.additionalExpenses <= 0) return null;
-    let softwareCost = workerSalaryCalculations() + insuranceContributionsCalculations().totalContributions + calculationOfExpensesForComputerMaintenance().totalAnnualExpenses;
+    const totalAnnualExpenses = calculationOfExpensesForComputerMaintenance()?.totalAnnualExpenses || 0;
+    let softwareCost = workerSalaryCalculations() + insuranceContributionsCalculations().totalContributions + totalAnnualExpenses;
     
     return parseFloat((softwareCost / (formData.savingsOnAutomation + formData.annualSavings + formData.additionalExpenses)).toFixed(2));
   }, [formData.additionalExpenses, formData.annualSavings, formData.savingsOnAutomation, calculationOfExpensesForComputerMaintenance, insuranceContributionsCalculations, workerSalaryCalculations]);
@@ -648,7 +649,11 @@ function FeasibilityForm({ receivedData, onDataChange }) {
                 <h3>Выгода от предотвращения угроз: {calculationFeasibilityTotal().threatPreventionBenefit}</h3>
                 {/* <h3>Экономическая эффективность: {Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2)}</h3> */}
                 <h3>Расходы на инормационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3>
-                <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
+                {calculationFeasibilityTotal().paybackPeriod === Infinity ? (
+                  <h3>Срок окупаемости: никогда</h3>
+                ) : (
+                  <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
+                )}
                 <h3>Коэффициент предотвращения убытков: {calculationFeasibilityTotal().lossPreventionCoefficient}</h3>
               </div>
             ) : (

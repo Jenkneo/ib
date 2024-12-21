@@ -117,11 +117,11 @@ function Calculator() {
           </strong> */}
         </div>
         {isValidData(expensesData) && isValidData(feasibilityData) ? (
-          <button className="download-btn" onClick={downloadCalculations}>
+          <button className="download-btn btn-enabled" onClick={downloadCalculations}>
             Скачать расчеты
           </button>
         ) : (
-          <button className="download-btn disabled" disabled>
+          <button className="download-btn btn-disabled" disabled>
             Скачать расчеты
           </button>
         )}
