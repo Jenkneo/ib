@@ -259,7 +259,6 @@ export const hardwareSections = [
 export const hardwareVariables = {
     hasComputer: false,
     computerPrice: 0,
-    computerLiquidationPrice: 0,
     computerUsageTime: 0,
     computerInstallationTime: 0,
     computerWorkerSalary: 0,
@@ -267,7 +266,6 @@ export const hardwareVariables = {
 
     hasScreen: false,
     screenPrice: 0,
-    screenLiquidationPrice: 0,
     screenUsageTime: 0,
     screenInstallationTime: 0,
     screenWorkerSalary: 0,
@@ -275,7 +273,6 @@ export const hardwareVariables = {
 
     hasPrinter: false,
     printerPrice: 0,
-    printerLiquidationPrice: 0,
     printerUsageTime: 0,
     printerInstallationTime: 0,
     printerWorkerSalary: 0,
@@ -283,7 +280,6 @@ export const hardwareVariables = {
 
     hasScanner: false,
     scannerPrice: 0,
-    scannerLiquidationPrice: 0,
     scannerUsageTime: 0,
     scannerInstallationTime: 0,
     scannerWorkerSalary: 0,
@@ -291,7 +287,6 @@ export const hardwareVariables = {
 
     hasKeyboard: false,
     keyboardPrice: 0,
-    keyboardLiquidationPrice: 0,
     keyboardUsageTime: 0,
     keyboardInstallationTime: 0,
     keyboardWorkerSalary: 0,
@@ -299,7 +294,6 @@ export const hardwareVariables = {
 
     hasWebCamera: false,
     webCameraPrice: 0,
-    webCameraLiquidationPrice: 0,
     webCameraUsageTime: 0,
     webCameraInstallationTime: 0,
     webCameraWorkerSalary: 0,
@@ -307,7 +301,6 @@ export const hardwareVariables = {
 
     hasNetworkDevices: false,
     networkDevicesPrice: 0,
-    networkDevicesLiquidationPrice: 0,
     networkDevicesUsageTime: 0,
     networkDevicesInstallationTime: 0,
     networkDevicesWorkerSalary: 0,
@@ -315,7 +308,6 @@ export const hardwareVariables = {
 
     hasPowerSupply: false,
     powerSupplyPrice: 0,
-    powerSupplyLiquidationPrice: 0,
     powerSupplyUsageTime: 0,
     powerSupplyInstallationTime: 0,
     powerSupplyWorkerSalary: 0,
@@ -323,7 +315,6 @@ export const hardwareVariables = {
 
     hasProjector: false,
     projectorPrice: 0,
-    projectorLiquidationPrice: 0,
     projectorUsageTime: 0,
     projectorInstallationTime: 0,
     projectorWorkerSalary: 0,
@@ -331,7 +322,6 @@ export const hardwareVariables = {
 
     hasVideoControl: false,
     videoControlPrice: 0,
-    videoControlLiquidationPrice: 0,
     videoControlUsageTime: 0,
     videoControlInstallationTime: 0,
     videoControlWorkerSalary: 0,
@@ -339,7 +329,6 @@ export const hardwareVariables = {
 
     hasCartridges: false,
     cartridgesPrice: 0,
-    cartridgesLiquidationPrice: 0,
     cartridgesUsageTime: 0,
     cartridgesInstallationTime: 0,
     cartridgesWorkerSalary: 0,
@@ -347,7 +336,6 @@ export const hardwareVariables = {
 
     hasConference: false,
     conferencePrice: 0,
-    conferenceLiquidationPrice: 0,
     conferenceUsageTime: 0,
     conferenceInstallationTime: 0,
     conferenceWorkerSalary: 0,
@@ -355,7 +343,6 @@ export const hardwareVariables = {
 
     hasNetworkStorage: false,
     networkStoragePrice: 0,
-    networkStorageLiquidationPrice: 0,
     networkStorageUsageTime: 0,
     networkStorageInstallationTime: 0,
     networkStorageWorkerSalary: 0,
@@ -363,7 +350,6 @@ export const hardwareVariables = {
 
     hasVideoArchive: false,
     videoArchivePrice: 0,
-    videoArchiveLiquidationPrice: 0,
     videoArchiveUsageTime: 0,
     videoArchiveInstallationTime: 0,
     videoArchiveWorkerSalary: 0,
@@ -371,7 +357,6 @@ export const hardwareVariables = {
 
     hasSecuritySystem: false,
     securitySystemPrice: 0,
-    securitySystemLiquidationPrice: 0,
     securitySystemUsageTime: 0,
     securitySystemInstallationTime: 0,
     securitySystemWorkerSalary: 0,

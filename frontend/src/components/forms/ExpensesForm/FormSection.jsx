@@ -9,6 +9,16 @@ const FormSection = ({
   onFieldChange,
   electricityCost = null,
 }) => {
+  let electricity = 0
+  let installation = 0
+  let price = 0
+  
+  if (fields.length === 5) {
+    electricity = (fields[1].value * 248) + (fields[4].value * electricityCost)
+    installation = fields[2].value * fields[3].value
+    price = fields[0].value
+  }
+
   return (
     <div className="form-section">
       <div className="checkbox-group">
@@ -37,6 +47,15 @@ const FormSection = ({
               />
             </div>
           ))}
+        <div>
+          {fields.length === 5 && (
+            <div>
+              <div>Электричество: {electricity}</div>
+              <div>Стоимость установки и настройки: {installation}</div>
+              <h4>Общая стоимость: {electricity + installation + price}</h4>
+            </div>
+          )}
+          </div>
         </div>
       )}
     </div>

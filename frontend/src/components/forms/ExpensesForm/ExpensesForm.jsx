@@ -56,7 +56,7 @@ function ExpensesForm({ onDataChange }) {
       if (key.startsWith('has')) {
         const varName = key.replace('has', '').replace(/^./, str => str.toLowerCase());
         if (formData[key]) {
-          total += (formData[`${varName}UsageTime`] * 365) + (formData[`${varName}Power`] * formData.electricityCost) + (formData[`${varName}InstallationTime`] * formData[`${varName}WorkerSalary`]);
+          total += (formData[`${varName}Price`]) + (formData[`${varName}UsageTime`] * 248) * (formData[`${varName}Power`] * formData.electricityCost) + (formData[`${varName}InstallationTime`] * formData[`${varName}WorkerSalary`]);
         }
       }
     });
@@ -113,7 +113,7 @@ function ExpensesForm({ onDataChange }) {
           courseTotal: studyStaffTotal(),
           incidentCost: (formData.assetPrice * formData.impactFactor * (formData.incidentFrequency / (formData.occurrencePeriod > 0 ? formData.occurrencePeriod : 1))),
           safetyMeasuresCost: (formData.equipmentPrice + formData.oftenEquipmentPrice),
-          recoveryCost: ((formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()),
+          recoveryCost: parseFloat(((formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()).toFixed(2)),
         }
       );
     }, 1000); // Обновляем данные каждую секунду
@@ -282,7 +282,7 @@ function ExpensesForm({ onDataChange }) {
             </div>
 
             {formData.occurrencePeriod !== 0 ? (
-              <h3>Общая стоимость: {formData.assetPrice * formData.impactFactor * (formData.incidentFrequency / formData.occurrencePeriod)}</h3>
+              <h3>Общая стоимость: {parseFloat((formData.assetPrice * formData.impactFactor * (formData.incidentFrequency / formData.occurrencePeriod)).toFixed(2))}</h3>
             ) : (
               <h3>Заполните поле "Срок возникновения инцидента"</h3>
             )}
@@ -344,7 +344,10 @@ function ExpensesForm({ onDataChange }) {
                 min="0"
               />
             </div>
-            <h3>Общая стоимость: {(formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()} </h3>
+            <h3>Стоимость восстановления: {formData.recoveryTime && formData.workerHourPrice ? 
+                                          parseFloat(((formData.recoveryTime * formData.workerHourPrice) + cyberAttackTotal() + hardwareTotal() + softwareTotal()).toFixed(2))
+                                          : 0
+            } </h3>
           </div>
           <span className='total-calculations'></span>
 

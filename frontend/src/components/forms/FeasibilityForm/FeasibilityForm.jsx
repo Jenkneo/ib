@@ -117,7 +117,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     if (!((formData.workingDaysInMonth >= 1 && formData.workingDaysInMonth <= 31) && (formData.workingHoursInDay >= 1 && formData.workingHoursInDay <= 12))) {
       return null;
     }
-    return (formData.monthlySalary * formData.totalDevelopmentTime) * (formData.workingDaysInMonth * formData.workingHoursInDay)
+    return parseFloat(((formData.monthlySalary * formData.totalDevelopmentTime) / (formData.workingDaysInMonth * formData.workingHoursInDay)).toFixed(2));
   }, [formData.workingDaysInMonth, formData.workingHoursInDay, formData.monthlySalary, formData.totalDevelopmentTime]);
 
   const systemCalculations = useCallback(() => {
@@ -135,7 +135,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     const programTypingTime = parseFloat((Q / 50).toFixed(2));
     const debuggingTestingTime = parseFloat(((Q * 4) / (50 * formData.qualificationCoefficient)).toFixed(2));
     const documentationTime = parseFloat((formData.documentationTime * 8).toFixed(2));
-    const total = parseFloat((taskDescriptionTime + algorithmDevelopmentTime + flowchartDevelopmentTime + programmingTime + programTypingTime + debuggingTestingTime + documentationTime).toFixed(2));
+    const total = parseFloat((taskDescriptionTime + algorithmDevelopmentTime + flowchartDevelopmentTime + programmingTime + programTypingTime + debuggingTestingTime + documentationTime + 40).toFixed(2));
     return {
       taskDescriptionTime,
       algorithmDevelopmentTime,
@@ -159,7 +159,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
       itCompany: {    pension: 0.06, medical: 0,      social: 0.029,  injury: formData.professionalRiskClass },
       usn: {          pension: 0.06, medical: 0,      social: 0.029,  injury: formData.professionalRiskClass },
       agriculture: {  pension: 0.06, medical: 0,      social: 0,      injury: formData.professionalRiskClass },
-      residientOez: { pension: 0.06, medical: 0.051,  social: 0,      injury: 0.002 },
+      residientOez: { pension: 0.06, medical: 0.051,  social: 0,      injury: 0.2 },
     };
 
     const { pension, medical, social, injury } = rates[formData.businessType] || {};
@@ -167,7 +167,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     pensionFund = parseFloat((formData.employeeSalary * pension).toFixed(2));
     medicalInsuranceFund = parseFloat((formData.employeeSalary * medical).toFixed(2));
     socialInsuranceFund = parseFloat((formData.employeeSalary * social).toFixed(2));
-    injuryContributions = parseFloat((formData.employeeSalary * injury).toFixed(2));
+    injuryContributions = parseFloat((formData.employeeSalary * injury / 100).toFixed(2));
 
     let totalContributions = pensionFund + medicalInsuranceFund + socialInsuranceFund + injuryContributions;
     return {
@@ -182,7 +182,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
   const calculationOfExpensesForComputerMaintenance = useCallback(() => {
     if (formData.usefulLifeSpan <= 0) return null;
     let annualAmortization = parseFloat((100 / formData.usefulLifeSpan).toFixed(2));
-    let amortizationExpenses = parseFloat((formData.totalPCPeripheralPower * annualAmortization).toFixed(2));
+    let amortizationExpenses = parseFloat((formData.singlePCPeripheralCost * annualAmortization / 100).toFixed(2));
     let electricityExpenses = parseFloat((formData.annualEffectiveOperatingTime * formData.costPerKw * (formData.totalPCPeripheralPower + formData.totalLightingPower)).toFixed(2));
     let totalAnnualExpenses = parseFloat((amortizationExpenses + electricityExpenses).toFixed(2));
     if (totalAnnualExpenses <= 0) return null;
@@ -195,7 +195,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
       totalAnnualExpenses,
       costPerMachineHour
     }
-  }, [formData.annualEffectiveOperatingTime, formData.costPerKw, formData.totalLightingPower, formData.totalPCPeripheralPower, formData.usefulLifeSpan]);
+  }, [formData.annualEffectiveOperatingTime, formData.costPerKw, formData.totalLightingPower, formData.totalPCPeripheralPower, formData.usefulLifeSpan, formData.singlePCPeripheralCost]);
 
   const softwareCostCalculations = useCallback(() => {
     if (!(workerSalaryCalculations() && insuranceContributionsCalculations() && calculationOfExpensesForComputerMaintenance())) return null;
@@ -205,18 +205,16 @@ function FeasibilityForm({ receivedData, onDataChange }) {
 
   const calculationOfPaybackPeriod = useCallback(() => {
     if (formData.savingsOnAutomation + formData.annualSavings + formData.additionalExpenses <= 0) return null;
-    const totalAnnualExpenses = calculationOfExpensesForComputerMaintenance()?.totalAnnualExpenses || 0;
-    let softwareCost = workerSalaryCalculations() + insuranceContributionsCalculations().totalContributions + totalAnnualExpenses;
-    
-    return parseFloat((softwareCost / (formData.savingsOnAutomation + formData.annualSavings + formData.additionalExpenses)).toFixed(2));
-  }, [formData.additionalExpenses, formData.annualSavings, formData.savingsOnAutomation, calculationOfExpensesForComputerMaintenance, insuranceContributionsCalculations, workerSalaryCalculations]);
+
+    return parseFloat((softwareCostCalculations() / (formData.savingsOnAutomation + formData.annualSavings - formData.additionalExpenses)).toFixed(2));
+  }, [formData.additionalExpenses, formData.annualSavings, formData.savingsOnAutomation, softwareCostCalculations]);
 
   const calculationFeasibilityTotal = useCallback(() => {
     if (!receivedData) return null;
     const threatPreventionBenefit = parseFloat(((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)).toFixed(2));
     const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
     const paybackPeriod = parseFloat((informationSecurityExpenses / threatPreventionBenefit).toFixed(2));
-    const lossPreventionCoefficient = parseFloat((threatPreventionBenefit).toFixed(2));
+    const lossPreventionCoefficient = threatPreventionBenefit / informationSecurityExpenses;
     return {
       threatPreventionBenefit,
       informationSecurityExpenses,
@@ -612,9 +610,8 @@ function FeasibilityForm({ receivedData, onDataChange }) {
                 min="0"
               />
             </div>
-
             {calculationOfPaybackPeriod() ? (
-              <h3>Окупаемость программного продукта: {calculationOfPaybackPeriod()}</h3>
+              <h3>Окупаемость программного продукта в годах: {calculationOfPaybackPeriod()}</h3>
             ) : (
               <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
             )}
@@ -648,18 +645,19 @@ function FeasibilityForm({ receivedData, onDataChange }) {
               <div>
                 <h3>Выгода от предотвращения угроз: {calculationFeasibilityTotal().threatPreventionBenefit}</h3>
                 {/* <h3>Экономическая эффективность: {Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2)}</h3> */}
-                <h3>Расходы на инормационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3>
-                {calculationFeasibilityTotal().paybackPeriod === Infinity ? (
+                <h3>Расходы на информационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3>
+                {calculationFeasibilityTotal().paybackPeriod === Infinity || calculationFeasibilityTotal().paybackPeriod <0 ? (
                   <h3>Срок окупаемости: никогда</h3>
                 ) : (
                   <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
                 )}
-                <h3>Коэффициент предотвращения убытков: {calculationFeasibilityTotal().lossPreventionCoefficient}</h3>
+                <h3>Коэффициент предотвращения убытков: {isNaN(calculationFeasibilityTotal().lossPreventionCoefficient) ? 'не определен' : calculationFeasibilityTotal().lossPreventionCoefficient}</h3>
               </div>
             ) : (
               <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
             )}
           </div>
+          {console.log(calculationFeasibilityTotal())}
         </div>
       )}
     </div>

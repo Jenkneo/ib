@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import Select from 'react-select';
+// import Select from 'react-select';
 
 function OrganizationInfoForm({ onCalculate, onDataChange }) {
   const [formData, setFormData] = useState({
@@ -15,11 +15,11 @@ function OrganizationInfoForm({ onCalculate, onDataChange }) {
     onDataChange(formData); // Вызываем родительскую функцию
   }, [formData, onDataChange]);
 
-  const organizationSizes = [
-    { value: 'small', label: 'Маленький' },
-    { value: 'medium', label: 'Средний' },
-    { value: 'large', label: 'Большой' }
-  ];
+  // const organizationSizes = [
+  //   { value: 'small', label: 'Маленький' },
+  //   { value: 'medium', label: 'Средний' },
+  //   { value: 'large', label: 'Большой' }
+  // ];
 
   // Потом надо будет подвязать
   // eslint-disable-next-line
@@ -41,12 +41,12 @@ function OrganizationInfoForm({ onCalculate, onDataChange }) {
     }));
   };
 
-  const handleSizeChange = (selectedOption) => {
-    setFormData(prev => ({
-      ...prev,
-      organizationSize: selectedOption.value
-    }));
-  };
+  // const handleSizeChange = (selectedOption) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     organizationSize: selectedOption.value
+  //   }));
+  // };
 
   return (
     <div className="form-container">
@@ -66,7 +66,7 @@ function OrganizationInfoForm({ onCalculate, onDataChange }) {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label>Тип отрасли:</label>
           <input
             type="text"
@@ -101,7 +101,7 @@ function OrganizationInfoForm({ onCalculate, onDataChange }) {
             options={organizationSizes}
             className="react-select"
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

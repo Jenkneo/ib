@@ -6,12 +6,6 @@ const baseFields = [
     min: 0,
   },
   {
-    label: 'Ликвидационная стоимость:',
-    type: 'number',
-    name: 'liquidationPrice',
-    min: 0,
-  },
-  {
     label: 'Срок полезного использования (час/день):',
     type: 'number',
     name: 'usageTime',

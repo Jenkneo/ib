@@ -10,9 +10,9 @@ function Header({ onLogout, user }) {
           <div className="nav-links">
             <Link to="/" className="nav-link">Калькулятор</Link>
             <Link to="/profile" className="nav-link">Личный кабинет</Link>
-            {user?.isAdmin && (
+            {user?.isAdmin ? (
               <Link to="/admin" className="nav-link">Администрирование</Link>
-            )}
+            ) : null}
             <button className="logout-btn" onClick={onLogout}>Выйти</button>
           </div>
         </nav>
