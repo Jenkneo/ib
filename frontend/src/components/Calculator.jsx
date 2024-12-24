@@ -9,32 +9,18 @@ function Calculator() {
   const [organizationData, setOrganizationData] = useState();
   const [feasibilityData, setFeasibilityData] = useState();
 
-  const isValidData = (data) => {
-    if (typeof data === 'number') {
-      return !isNaN(data);
+  const checkValue = (value) => {
+    if (value === null || isNaN(value)) {
+      return value === null ? 'нет данных' : 'не определен';
     }
 
-    if (typeof data === 'object' && data !== null) {
-      for (const key in data) {
-        if (!isValidData(data[key])) {
-          return false;
-        }
-      }
-
-      return true;
-    }
-
-    return false;
+    return value;
   }
 
   const downloadCalculations = () => {
     const content = `
 ## Информация об организации
 - Название организации: ${organizationData.organizationName}
-- Тип отрасли: ${organizationData.industryType}
-- Годовой бюджет организации (руб): ${organizationData.annualBudget}
-- Бюджет на информационную безопасность (руб): ${organizationData.securityBudget}
-- Размер организации: ${organizationData.organizationSize === 'small' ? 'Маленький' : organizationData.organizationSize === 'medium' ? 'Средний' : 'Большой'}
 
 ## Информация о расходах
 - Расходы на программное обеспечение для информационной безопасности (руб): ${expensesData.softwareTotal}
@@ -47,14 +33,14 @@ function Calculator() {
 
 ## Технико-экономическое обоснование для разрабатываемой системы
 ### Основные параметры:
-- Время на описание задачи: ${feasibilityData.systemCalculations.taskDescriptionTime}
-- Время на разработку алгоритма: ${feasibilityData.systemCalculations.algorithmDevelopmentTime}
-- Время на разработку блок-схемы: ${feasibilityData.systemCalculations.flowchartDevelopmentTime}
-- Время написания программы на языке программирования: ${feasibilityData.systemCalculations.programmingTime}
-- Время набивки программы: ${feasibilityData.systemCalculations.programTypingTime}
-- Время отладки и тестирования программы: ${feasibilityData.systemCalculations.debuggingTestingTime}
-- Время на оформление документации: ${feasibilityData.systemCalculations.documentationTime}
-- Общее время на создание программного продукта: ${feasibilityData.systemCalculations.total}
+- Время на описание задачи: ${checkValue(feasibilityData.systemCalculations?.taskDescriptionTime)}
+- Время на разработку алгоритма: ${checkValue(feasibilityData.systemCalculations?.algorithmDevelopmentTime)}
+- Время на разработку блок-схемы: ${checkValue(feasibilityData.systemCalculations?.flowchartDevelopmentTime)}
+- Время написания программы на языке программирования: ${checkValue(feasibilityData.systemCalculations?.programmingTime)}
+- Время набивки программы: ${checkValue(feasibilityData.systemCalculations?.programTypingTime)}
+- Время отладки и тестирования программы: ${checkValue(feasibilityData.systemCalculations?.debuggingTestingTime)}
+- Время на оформление документации: ${checkValue(feasibilityData.systemCalculations?.documentationTime)}
+- Общее время на создание программного продукта: ${checkValue(feasibilityData.systemCalculations?.total)}
 
 ### Расчет заработной платы исполнителя работ по созданию программного продукта
 - Заработная плата исполнителя составляет: ${feasibilityData.workerSalaryCalculations ? feasibilityData.workerSalaryCalculations : 'нет данных'}
@@ -67,11 +53,11 @@ function Calculator() {
 - Общие взносы: ${feasibilityData.insuranceContributionsCalculations.totalContributions}
 
 ### Расчет расходов на содержание и эксплуатацию ПЭВМ:
-- Годовая амортизация (%): ${feasibilityData.calculationOfExpensesForComputerMaintenance.annualAmortization}
-- Амортизационные отчисления: ${feasibilityData.calculationOfExpensesForComputerMaintenance.amortizationExpenses}
-- Затраты на электроэнергию: ${feasibilityData.calculationOfExpensesForComputerMaintenance.electricityExpenses}
-- Годовые расходы на содержание и эксплуатацию 1-ой ПЭВМ: ${feasibilityData.calculationOfExpensesForComputerMaintenance.totalAnnualExpenses}
-- Себестоимость 1-го машино-часа работы ПЭВМ: ${feasibilityData.calculationOfExpensesForComputerMaintenance.costPerMachineHour}
+- Годовая амортизация (%): ${checkValue(feasibilityData.calculationOfExpensesForComputerMaintenance?.annualAmortization)}
+- Амортизационные отчисления: ${checkValue(feasibilityData.calculationOfExpensesForComputerMaintenance?.amortizationExpenses)}
+- Затраты на электроэнергию: ${checkValue(feasibilityData.calculationOfExpensesForComputerMaintenance?.electricityExpenses)}
+- Годовые расходы на содержание и эксплуатацию 1-ой ПЭВМ: ${checkValue(feasibilityData.calculationOfExpensesForComputerMaintenance?.totalAnnualExpenses)}
+- Себестоимость 1-го машино-часа работы ПЭВМ: ${checkValue(feasibilityData.calculationOfExpensesForComputerMaintenance?.costPerMachineHour)}
 
 ### Расчет себестоимости программного продукта
 - Себестоимость программного продукта составляет: ${feasibilityData.softwareCost ? feasibilityData.softwareCost : 'нет данных'}
@@ -80,15 +66,15 @@ function Calculator() {
 - Окупаемость программного продукта: ${feasibilityData.calculationOfPaybackPeriod ? feasibilityData.calculationOfPaybackPeriod : 'нет данных'}
 
 ### Расчет выгод для системы информационной безопастности (СИБ): 
-- Выгода от предотвращения угроз: ${feasibilityData.calculationFeasibilityTotal.threatPreventionBenefit}
+- Выгода от предотвращения угроз: ${checkValue(feasibilityData.calculationFeasibilityTotal?.threatPreventionBenefit)}
 - Расходы на инормационную безопасность составляют: ${feasibilityData.calculationFeasibilityTotal.informationSecurityExpenses}
 - Срок окупаемости: ${isFinite(feasibilityData.calculationFeasibilityTotal.paybackPeriod) ? feasibilityData.calculationFeasibilityTotal.paybackPeriod : 'никогда'}
-- Коэффициент предотвращения убытков: ${feasibilityData.calculationFeasibilityTotal.lossPreventionCoefficient}
+- Коэффициент предотвращения убытков: ${checkValue(feasibilityData.calculationFeasibilityTotal.lossPreventionCoefficient)}
 
 Дата расчета: ${new Date().toLocaleDateString()}
 `;
-    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-    saveAs(blob, 'security-calculations.md');
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, 'security-calculations.txt');
   };
 
   return (
@@ -116,15 +102,9 @@ function Calculator() {
             руб.
           </strong> */}
         </div>
-        {isValidData(expensesData) && isValidData(feasibilityData) ? (
           <button className="download-btn btn-enabled" onClick={downloadCalculations}>
             Скачать расчеты
           </button>
-        ) : (
-          <button className="download-btn btn-disabled" disabled>
-            Скачать расчеты
-          </button>
-        )}
       </div>
     </div>
   );
