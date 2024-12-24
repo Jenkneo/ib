@@ -214,7 +214,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     const threatPreventionBenefit = parseFloat(((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)).toFixed(2));
     const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
     const paybackPeriod = parseFloat((informationSecurityExpenses / threatPreventionBenefit).toFixed(2));
-    const lossPreventionCoefficient = threatPreventionBenefit / informationSecurityExpenses;
+    const lossPreventionCoefficient = parseFloat(threatPreventionBenefit / informationSecurityExpenses * 100).toFixed(2);
     return {
       threatPreventionBenefit,
       informationSecurityExpenses,
