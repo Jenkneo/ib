@@ -214,7 +214,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     const threatPreventionBenefit = parseFloat(((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)).toFixed(2));
     const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
     const paybackPeriod = parseFloat((informationSecurityExpenses / threatPreventionBenefit).toFixed(2));
-    const lossPreventionCoefficient = parseFloat(threatPreventionBenefit / informationSecurityExpenses * 100).toFixed(2);
+    const lossPreventionCoefficient = parseFloat((threatPreventionBenefit / informationSecurityExpenses) * 100).toFixed(4);
     return {
       threatPreventionBenefit,
       informationSecurityExpenses,
@@ -651,7 +651,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
                 ) : (
                   <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
                 )}
-                <h3>Коэффициент предотвращения убытков: {isNaN(calculationFeasibilityTotal().lossPreventionCoefficient) ? 'не определен' : calculationFeasibilityTotal().lossPreventionCoefficient}</h3>
+                <h3>Коэффициент предотвращения убытков: {isNaN(calculationFeasibilityTotal().lossPreventionCoefficient) ? 'не определен' : calculationFeasibilityTotal().lossPreventionCoefficient + '%'}</h3>
               </div>
             ) : (
               <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
