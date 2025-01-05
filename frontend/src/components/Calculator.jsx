@@ -67,9 +67,13 @@ function Calculator() {
 
 ### Расчет выгод для системы информационной безопастности (СИБ): 
 - Выгода от предотвращения угроз: ${checkValue(feasibilityData.calculationFeasibilityTotal?.threatPreventionBenefit)}
-- Расходы на инормационную безопасность составляют: ${feasibilityData.calculationFeasibilityTotal.informationSecurityExpenses}
 - Срок окупаемости: ${isFinite(feasibilityData.calculationFeasibilityTotal.paybackPeriod) ? feasibilityData.calculationFeasibilityTotal.paybackPeriod : 'никогда'}
 - Коэффициент предотвращения убытков: ${checkValue(feasibilityData.calculationFeasibilityTotal.lossPreventionCoefficient)}
+
+### ИТОГО
+- Расходы на инормационную безопасность составляют: ${feasibilityData.calculationFeasibilityTotal.informationSecurityExpenses}
+- Расчет себестоимости программного продукта: ${feasibilityData.softwareCost ? feasibilityData.softwareCost : 'нет данных'}
+- Расчет выгод для системы информационной бзопасности: ${checkValue(feasibilityData.calculationFeasibilityTotal?.threatPreventionBenefit)}
 
 Дата расчета: ${new Date().toLocaleDateString()}
 `;

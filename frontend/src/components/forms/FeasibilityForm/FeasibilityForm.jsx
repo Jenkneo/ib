@@ -35,6 +35,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     additionalExpenses: 0,
 
     threatProbability: 0,
+    possibleLosses: 0,
     remainingRisk: 0,
 
     taskTypeCoefficient: 0,
@@ -169,7 +170,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
     socialInsuranceFund = parseFloat((formData.employeeSalary * social).toFixed(2));
     injuryContributions = parseFloat((formData.employeeSalary * injury / 100).toFixed(2));
 
-    let totalContributions = pensionFund + medicalInsuranceFund + socialInsuranceFund + injuryContributions;
+    let totalContributions = parseFloat((pensionFund + medicalInsuranceFund + socialInsuranceFund + injuryContributions).toFixed(2));
     return {
       pensionFund,
       medicalInsuranceFund,
@@ -211,17 +212,21 @@ function FeasibilityForm({ receivedData, onDataChange }) {
 
   const calculationFeasibilityTotal = useCallback(() => {
     if (!receivedData) return null;
-    const threatPreventionBenefit = parseFloat(((receivedData.cyberAttackTotal * formData.threatProbability / 100) - (receivedData.cyberAttackTotal * formData.remainingRisk / 100)).toFixed(2));
+    const threatPreventionBenefit = parseFloat(((formData.possibleLosses * formData.threatProbability) - (formData.possibleLosses * formData.remainingRisk)).toFixed(2));
+    const economicEfficiencyImplementation = softwareCostCalculations() ? parseFloat(threatPreventionBenefit - softwareCostCalculations() / softwareCostCalculations()).toFixed(2) : 'не определено';
     const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
-    const paybackPeriod = parseFloat((informationSecurityExpenses / threatPreventionBenefit).toFixed(2));
+    const paybackPeriod = threatPreventionBenefit !== 0 ? 
+      parseFloat((softwareCostCalculations() / threatPreventionBenefit).toFixed(2)) : 
+      'не определен';
     const lossPreventionCoefficient = parseFloat((threatPreventionBenefit / informationSecurityExpenses) * 100).toFixed(4);
     return {
       threatPreventionBenefit,
+      economicEfficiencyImplementation,
       informationSecurityExpenses,
-      paybackPeriod: isNaN(paybackPeriod) ? 0 : paybackPeriod,
+      paybackPeriod,
       lossPreventionCoefficient
     }
-  }, [receivedData, formData.threatProbability, formData.remainingRisk]);
+  }, [receivedData, formData.threatProbability, formData.remainingRisk, formData.possibleLosses, softwareCostCalculations]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -631,6 +636,16 @@ function FeasibilityForm({ receivedData, onDataChange }) {
               />
             </div>
             <div className="form-group">
+              <label>Укажите возможные убытки:</label>
+              <input
+                type="number"
+                name="possibleLosses"
+                value={formData.possibleLosses}
+                onChange={handleChange}
+                min="0"
+              />
+            </div>
+            <div className="form-group">
               <label>Укажите оставшийся риск после внедрения СИБ:</label>
               <input
                 type="number"
@@ -644,20 +659,28 @@ function FeasibilityForm({ receivedData, onDataChange }) {
             {receivedData ? (
               <div>
                 <h3>Выгода от предотвращения угроз: {calculationFeasibilityTotal().threatPreventionBenefit}</h3>
-                {/* <h3>Экономическая эффективность: {Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2)}</h3> */}
-                <h3>Расходы на информационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3>
-                {calculationFeasibilityTotal().paybackPeriod === Infinity || calculationFeasibilityTotal().paybackPeriod <0 ? (
-                  <h3>Срок окупаемости: никогда</h3>
-                ) : (
-                  <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
-                )}
-                <h3>Коэффициент предотвращения убытков: {isNaN(calculationFeasibilityTotal().lossPreventionCoefficient) ? 'не определен' : calculationFeasibilityTotal().lossPreventionCoefficient + '%'}</h3>
+                <h3>Экономическая эффективность внедрения системы: {calculationFeasibilityTotal().economicEfficiencyImplementation}</h3>
+                <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
+                {/* <h3>Расходы на информационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3> */}
               </div>
             ) : (
               <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
             )}
           </div>
-          {console.log(calculationFeasibilityTotal())}
+
+          {/* ИТОГО */}
+          <div className="form-section">
+            <h3>ИТОГО</h3>
+            {receivedData ? (
+              <div>
+                <h3>Расходы на инормационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3>
+                <h3>Расчет себестоимости программного продукта: {softwareCostCalculations() ?  softwareCostCalculations() : 'нет данных'}</h3>
+                <h3>Расчет выгод для системы информационной бзопасности: {calculationFeasibilityTotal().threatPreventionBenefit}</h3>
+              </div>
+            ) : (
+              <h3>Для подсчета необходимо корректно заполнить все поля.</h3>
+            )}
+          </div>
         </div>
       )}
     </div>
