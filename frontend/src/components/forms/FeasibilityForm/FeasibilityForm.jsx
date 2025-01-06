@@ -213,7 +213,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
   const calculationFeasibilityTotal = useCallback(() => {
     if (!receivedData) return null;
     const threatPreventionBenefit = parseFloat((((formData.possibleLosses * formData.threatProbability) - (formData.possibleLosses * formData.remainingRisk))/100).toFixed(2));
-    const economicEfficiencyImplementation = softwareCostCalculations() ? parseFloat(threatPreventionBenefit - softwareCostCalculations() / softwareCostCalculations()).toFixed(2) : 'не определено';
+    const economicEfficiencyImplementation = softwareCostCalculations() ? parseFloat((threatPreventionBenefit - softwareCostCalculations()) / softwareCostCalculations()).toFixed(2) : 'не определено';
     const informationSecurityExpenses = parseFloat(Object.values(receivedData).reduce((acc, value) => acc + value, 0).toFixed(2));
     const paybackPeriod = threatPreventionBenefit !== 0 ? 
       parseFloat((softwareCostCalculations() / threatPreventionBenefit).toFixed(2)) : 
@@ -658,7 +658,7 @@ function FeasibilityForm({ receivedData, onDataChange }) {
 
             {receivedData ? (
               <div>
-                <h3>Выгода от предотвращения угроз: {calculationFeasibilityTotal().threatPreventionBenefit}%</h3>
+                <h3>Выгода от предотвращения угроз: {calculationFeasibilityTotal().threatPreventionBenefit}</h3>
                 <h3>Экономическая эффективность внедрения системы: {calculationFeasibilityTotal().economicEfficiencyImplementation}</h3>
                 <h3>Срок окупаемости: {calculationFeasibilityTotal().paybackPeriod}</h3>
                 {/* <h3>Расходы на информационную безопасность составляют: {calculationFeasibilityTotal().informationSecurityExpenses}</h3> */}
