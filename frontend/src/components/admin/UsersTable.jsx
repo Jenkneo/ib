@@ -10,11 +10,6 @@ function UsersTable({ users }) {
             <th>Имя</th>
             <th>Фамилия</th>
             <th>Email</th>
-            <th>Организация</th>
-            <th>Отрасль</th>
-            <th>Годовой бюджет</th>
-            <th>Бюджет на ИБ</th>
-            <th>Размер организации</th>
           </tr>
         </thead>
         <tbody>
@@ -24,11 +19,6 @@ function UsersTable({ users }) {
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.email}</td>
-              <td>{user.organizationName || '-'}</td>
-              <td>{user.industryType || '-'}</td>
-              <td>{user.annualBudget ? `${user.annualBudget.toLocaleString()} руб.` : '-'}</td>
-              <td>{user.securityBudget ? `${user.securityBudget.toLocaleString()} руб.` : '-'}</td>
-              <td>{user.organizationSize || '-'}</td>
             </tr>
           ))}
         </tbody>
