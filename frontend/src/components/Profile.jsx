@@ -31,11 +31,8 @@ function Profile({ user, onUpdateProfile }) {
 
     try {
       const profileData = {
-        organizationName: formData.organizationName,
-        industryType: formData.industryType,
-        annualBudget: Number(formData.annualBudget),
-        securityBudget: Number(formData.securityBudget),
-        organizationSize: formData.organizationSize
+        firstName: formData.firstName,
+        lastName: formData.lastName,
       };
 
       const updatedProfile = await updateProfile(profileData);
@@ -60,7 +57,7 @@ function Profile({ user, onUpdateProfile }) {
             value={formData.firstName}
             onChange={handleChange}
             required
-            disabled={true}
+            disabled={false}
           />
         </div>
         <div className="form-group">
@@ -71,7 +68,7 @@ function Profile({ user, onUpdateProfile }) {
             value={formData.lastName}
             onChange={handleChange}
             required
-            disabled={true}
+            disabled={false}
           />
         </div>
         <div className="form-group">

@@ -36,11 +36,8 @@ export function findUserByEmail(email) {
 export function updateUserProfile(userId, profileData) {
   const stmt = db.prepare(`
     UPDATE users SET
-      organizationName = @organizationName,
-      industryType = @industryType,
-      annualBudget = @annualBudget,
-      securityBudget = @securityBudget,
-      organizationSize = @organizationSize
+      firstName = @firstName,
+      lastName = @lastName
     WHERE id = @userId
   `);
   return stmt.run({ ...profileData, userId });

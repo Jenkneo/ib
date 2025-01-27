@@ -28,19 +28,13 @@ router.put('/', authenticateToken, (req, res) => {
   try {
     const userId = req.user.userId;
     const {
-      organizationName,
-      industryType,
-      annualBudget,
-      securityBudget,
-      organizationSize
+      firstName,
+      lastName
     } = req.body;
 
     updateUserProfile(userId, {
-      organizationName,
-      industryType,
-      annualBudget,
-      securityBudget,
-      organizationSize
+      firstName,
+      lastName
     });
 
     res.json({ message: 'Profile updated successfully' });
